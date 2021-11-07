@@ -2,7 +2,6 @@ package cinema.hib.service;
 
 import cinema.hib.model.Film;
 import cinema.hib.model.Genre;
-import cinema.hib.model.Slot;
 
 import java.util.List;
 
@@ -10,17 +9,13 @@ public interface GenreService {
 
     Genre create(Genre genre);
 
-    Genre readById(long id);
-
-    Genre readByName(String name);
+    Genre readById(int id);
 
     Genre update(Genre genre);
 
-    void delete(long id);
-
-    void delete(String name);
+    void delete(int id);
 
     List<Genre> getAll();
 
-    List<Film> getAllFilms(Genre Genre);
+    List<Film> getAllFilms(Genre genre);
 }
