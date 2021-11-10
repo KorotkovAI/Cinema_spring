@@ -27,8 +27,8 @@ public class Hall {
     @Size(min = 3, max = 25)
     private String name;
 
-    @ManyToMany(mappedBy = "seats")
+    @OneToMany
     @Setter
     @JoinColumn(name = "seat_id", referencedColumnName = "id")
-    private List <Seat> seat;
+    private List <Seat> seats;
 }

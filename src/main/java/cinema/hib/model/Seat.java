@@ -13,8 +13,6 @@ import java.util.List;
 @Entity
 @Table(name = "seats")
 @Getter
-@EqualsAndHashCode
-@ToString
 public class Seat {
 
     @Id
@@ -36,13 +34,10 @@ public class Seat {
     @Setter
     private double price;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @Setter
-    @Column(columnDefinition = "enum('isVip','typical')")
-    private String vip;
+    private SeatType seatType;
 
-    @ManyToMany(mappedBy = "halls")
     @Setter
-    @JoinColumn(name = "halls_name", referencedColumnName = "name")
-    private List<Hall> hall;
+    private String hall;
 }

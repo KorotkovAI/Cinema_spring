@@ -1,9 +1,7 @@
 package cinema.hib.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,8 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Getter
-@EqualsAndHashCode
-@ToString
 public class User {
 
     @Id

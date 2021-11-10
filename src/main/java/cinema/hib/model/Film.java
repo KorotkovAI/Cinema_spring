@@ -12,8 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "films")
 @Getter
-@EqualsAndHashCode
-@ToString
 public class Film {
 
     @Id
@@ -36,17 +34,21 @@ public class Film {
     @Setter
     private double rate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "enum('0+','12+', '16+', '18+')")
-    private String ageLimit;
+    @Enumerated(EnumType.ORDINAL)
+    private AgeLimit ageLimit;
 
-    @ManyToMany(mappedBy = "genres")
+    @NotBlank(message = "The film description cannot be empty")
+    @NotNull
+    @Setter
+    private String description;
+
+    @ManyToMany
     @Setter
     @JoinColumn(name = "genres_name", referencedColumnName = "name")
     private List<Genre> genres;
 
-    @OneToMany(mappedBy = "slots")
+    @OneToMany
     @Setter
     @JoinColumn(name = "slot_id", referencedColumnName = "id")
-    private List<Slot> slot;
+    private List<Slot> slots;
 }

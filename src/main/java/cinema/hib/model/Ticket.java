@@ -51,8 +51,7 @@ public class Ticket {
     @JoinColumn(name = "slots_id", referencedColumnName = "id")
     private Slot slot;
 
-    @Enumerated(EnumType.STRING)
     @Setter
-    @Column(columnDefinition = "enum('isUsed','isNotUsed')")
-    private String isUsedTicket;
+    @Column(name = "isUsedTicket", nullable = false)
+    private Boolean isUsedTicket = false;
 }

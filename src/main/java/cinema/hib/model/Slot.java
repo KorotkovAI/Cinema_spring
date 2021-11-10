@@ -14,8 +14,6 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "slots")
 @Getter
-@EqualsAndHashCode
-@ToString
 public class Slot {
 
     @Id
@@ -40,5 +38,5 @@ public class Slot {
     @ManyToOne
     @Setter
     @JoinColumn(name = "films_name", referencedColumnName = "name")
-    private Film filmName;
+    private Film film;
 }

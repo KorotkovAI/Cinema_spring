@@ -13,8 +13,6 @@ import java.util.List;
 @Entity
 @Table(name = "genres")
 @Getter
-@EqualsAndHashCode
-@ToString
 public class Genre {
 
     @Id
@@ -27,7 +25,7 @@ public class Genre {
     @Size(min = 3, max = 50)
     private String name;
 
-    @ManyToMany(mappedBy = "films")
+    @ManyToMany
     @Setter
     private List<Film> films;
 }
