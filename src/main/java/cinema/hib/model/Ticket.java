@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tickets")
@@ -55,6 +56,7 @@ public class Ticket {
     @Column(name = "isUsedTicket", nullable = false)
     private Boolean isUsedTicket = false;
 
+    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
@@ -63,11 +65,12 @@ public class Ticket {
         return createdAt.equals(ticket.createdAt) && userId.equals(ticket.userId) && filmName.equals(ticket.filmName) && hallName.equals(ticket.hallName) && seatId.equals(ticket.seatId) && slot.equals(ticket.slot) && isUsedTicket.equals(ticket.isUsedTicket);
     }
 
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), createdAt, userId, filmName, hallName, seatId, slot, isUsedTicket);
     }
 
-    @java.lang.Override
+    @Override
     public java.lang.String toString() {
         return "Ticket{" +
                 "createdAt=" + createdAt +

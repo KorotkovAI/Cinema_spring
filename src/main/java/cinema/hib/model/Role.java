@@ -3,6 +3,7 @@ package cinema.hib.model;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
@@ -16,19 +17,20 @@ public class Role {
     @Enumerated(EnumType.ORDINAL)
     private RoleType roleType;
 
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
-        Role role = (Role) object;
-        return roleType.equals(role.roleType);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return roleType == role.roleType;
     }
 
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), roleType);
     }
 
-    @java.lang.Override
+    @Override
     public java.lang.String toString() {
         return "Role{" +
                 "id=" + id +

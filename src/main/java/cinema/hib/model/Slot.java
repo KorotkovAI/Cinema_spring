@@ -1,15 +1,14 @@
 package cinema.hib.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "slots")
@@ -40,6 +39,7 @@ public class Slot {
     @JoinColumn(name = "films_name", referencedColumnName = "name")
     private Film film;
 
+    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
@@ -52,7 +52,7 @@ public class Slot {
         return Objects.hash(super.hashCode(), dateOfFilm, startTime, endTime, film);
     }
 
-    @java.lang.Override
+    @Override
     public java.lang.String toString() {
         return "Slot{" +
                 "id=" + id +

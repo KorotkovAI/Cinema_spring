@@ -62,6 +62,7 @@ public class FilmServiceImpl implements FilmService {
         return filmRepository.findAll();
     }
 //TODO I don`t know how
+    
     @Override
     public List<Slot> getAllSlots(Film film) {
         if (film != null) {

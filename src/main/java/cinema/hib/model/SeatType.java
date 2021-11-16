@@ -2,5 +2,10 @@ package cinema.hib.model;
 
 public enum SeatType {
     ISVIP,
-    TYPICAL
+    TYPICAL;
+
+    @Override
+    public String toString() {
+        return "SeatType{}";
+    }
 }

@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "films")
@@ -52,6 +53,7 @@ public class Film {
     @JoinColumn(name = "slot_id", referencedColumnName = "id")
     private List<Slot> slots;
 
+    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
@@ -60,11 +62,12 @@ public class Film {
         return duration == film.duration && name.equals(film.name) && description.equals(film.description);
     }
 
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), name, duration, description);
     }
 
-    @java.lang.Override
+    @Override
     public java.lang.String toString() {
         return "Film{" +
                 "name='" + name + '\'' +

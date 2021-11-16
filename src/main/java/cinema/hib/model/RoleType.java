@@ -2,5 +2,11 @@ package cinema.hib.model;
 
 public enum RoleType {
     ADMIN,
-    CUSTOMER
+    CUSTOMER;
+
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

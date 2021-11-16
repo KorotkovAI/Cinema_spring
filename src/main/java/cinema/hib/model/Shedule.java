@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "shedule")
@@ -23,6 +24,7 @@ public class Shedule {
     @OneToMany
     private List<Slot> slots;
 
+    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
@@ -31,11 +33,12 @@ public class Shedule {
         return hall.equals(shedule.hall) && slots.equals(shedule.slots);
     }
 
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), hall, slots);
     }
 
-    @java.lang.Override
+    @Override
     public java.lang.String toString() {
         return "Shedule{" +
                 "id=" + id +

@@ -6,7 +6,6 @@ import cinema.hib.model.Genre;
 import java.util.List;
 
 public interface GenreService {
-
     Genre create(Genre genre);
 
     Genre readById(int id);

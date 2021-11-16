@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -51,6 +52,7 @@ public class User {
     @Setter
     private List<Ticket> tickets;
 
+    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
@@ -59,11 +61,12 @@ public class User {
         return phoneNumber.equals(user.phoneNumber) && name.equals(user.name) && role.equals(user.role);
     }
 
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), phoneNumber, name, role);
     }
 
-    @java.lang.Override
+    @Override
     public java.lang.String toString() {
         return "User{" +
                 "id=" + id +

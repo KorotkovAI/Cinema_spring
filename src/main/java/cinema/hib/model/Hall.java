@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "halls")
@@ -28,6 +29,7 @@ public class Hall {
     @JoinColumn(name = "seat_id", referencedColumnName = "id")
     private List <Seat> seats;
 
+    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
@@ -36,11 +38,12 @@ public class Hall {
         return name.equals(hall.name);
     }
 
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), name);
     }
 
-    @java.lang.Override
+    @Override
     public java.lang.String toString() {
         return "Hall{" +
                 "id=" + id +

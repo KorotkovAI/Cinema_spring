@@ -7,7 +7,6 @@ import cinema.hib.model.Slot;
 import java.util.List;
 
 public interface FilmService {
-
     Film create(Film film);
 
     Film readById(long id);

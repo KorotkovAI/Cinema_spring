@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "genres")
@@ -27,6 +28,7 @@ public class Genre {
     @Setter
     private List<Film> films;
 
+    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
@@ -35,11 +37,12 @@ public class Genre {
         return name.equals(genre.name);
     }
 
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), name);
     }
 
-    @java.lang.Override
+    @Override
     public java.lang.String toString() {
         return "Genre{" +
                 "id=" + id +
