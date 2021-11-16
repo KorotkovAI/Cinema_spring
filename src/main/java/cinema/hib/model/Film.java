@@ -51,4 +51,25 @@ public class Film {
     @Setter
     @JoinColumn(name = "slot_id", referencedColumnName = "id")
     private List<Slot> slots;
+
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Film film = (Film) object;
+        return duration == film.duration && name.equals(film.name) && description.equals(film.description);
+    }
+
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, duration, description);
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "Film{" +
+                "name='" + name + '\'' +
+                ", duration=" + duration +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

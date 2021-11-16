@@ -39,4 +39,27 @@ public class Slot {
     @Setter
     @JoinColumn(name = "films_name", referencedColumnName = "name")
     private Film film;
+
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Slot slot = (Slot) object;
+        return dateOfFilm.equals(slot.dateOfFilm) && startTime.equals(slot.startTime) && endTime.equals(slot.endTime) && film.equals(slot.film);
+    }
+
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), dateOfFilm, startTime, endTime, film);
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "Slot{" +
+                "id=" + id +
+                ", dateOfFilm=" + dateOfFilm +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", film=" + film +
+                '}';
+    }
 }

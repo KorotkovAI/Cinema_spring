@@ -1,9 +1,7 @@
 package cinema.hib.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,8 +11,6 @@ import java.util.List;
 @Entity
 @Table(name = "halls")
 @Getter
-@EqualsAndHashCode
-@ToString
 public class Hall {
 
     @Id
@@ -31,4 +27,24 @@ public class Hall {
     @Setter
     @JoinColumn(name = "seat_id", referencedColumnName = "id")
     private List <Seat> seats;
+
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Hall hall = (Hall) object;
+        return name.equals(hall.name);
+    }
+
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name);
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "Hall{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

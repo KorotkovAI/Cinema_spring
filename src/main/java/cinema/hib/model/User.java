@@ -51,4 +51,25 @@ public class User {
     @Setter
     private List<Ticket> tickets;
 
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        User user = (User) object;
+        return phoneNumber.equals(user.phoneNumber) && name.equals(user.name) && role.equals(user.role);
+    }
+
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), phoneNumber, name, role);
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "User{" +
+                "id=" + id +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", role=" + role +
+                '}';
+    }
 }

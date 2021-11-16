@@ -18,8 +18,6 @@ public interface FilmService {
 
     void delete(long id);
 
-    void delete(String name);
-
     List<Film> getAll();
 
     List<Slot> getAllSlots(Film film);

@@ -1,9 +1,7 @@
 package cinema.hib.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -40,4 +38,28 @@ public class Seat {
 
     @Setter
     private String hall;
+
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Seat seat = (Seat) object;
+        return raw == seat.raw && place == seat.place && java.lang.Double.compare(seat.price, price) == 0 && seatType.equals(seat.seatType) && hall.equals(seat.hall);
+    }
+
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), raw, place, price, seatType, hall);
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "Seat{" +
+                "id=" + id +
+                ", raw=" + raw +
+                ", place=" + place +
+                ", price=" + price +
+                ", seatType=" + seatType +
+                ", hall='" + hall + '\'' +
+                '}';
+    }
 }

@@ -58,16 +58,10 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public void delete(String name) {
-        Film film = readByName(name);
-        filmRepository.delete(film);
-    }
-
-    @Override
     public List<Film> getAll() {
         return filmRepository.findAll();
     }
-//I don`t know how
+//TODO I don`t know how
     @Override
     public List<Slot> getAllSlots(Film film) {
         if (film != null) {
@@ -76,7 +70,7 @@ public class FilmServiceImpl implements FilmService {
         }
         throw new NullPointerException("Film cannot be 'null'");
     }
-//not right solution
+//TODO not right solution
     @Override
     public List<Genre> getAllGenres(Film film) {
         if (film != null) {

@@ -9,9 +9,5 @@ import java.util.Optional;
 
 public interface FilmRepository extends JpaRepository<Film, Long> {
 
-    List<Slot> getAllByName (String name);
-
-    Film findAllByGenres (Film film);
-
     Optional <Film> findFilmByName (String name);
 }

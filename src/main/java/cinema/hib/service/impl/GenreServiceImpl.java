@@ -52,6 +52,7 @@ public class GenreServiceImpl implements GenreService {
         return genreRepository.findAll();
     }
 
+    //TODO don't know how
     @Override
     public List<Film> getAllFilms(Genre genre) {
         if (genre != null) {

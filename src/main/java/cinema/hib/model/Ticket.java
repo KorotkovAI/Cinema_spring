@@ -54,4 +54,29 @@ public class Ticket {
     @Setter
     @Column(name = "isUsedTicket", nullable = false)
     private Boolean isUsedTicket = false;
+
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Ticket ticket = (Ticket) object;
+        return createdAt.equals(ticket.createdAt) && userId.equals(ticket.userId) && filmName.equals(ticket.filmName) && hallName.equals(ticket.hallName) && seatId.equals(ticket.seatId) && slot.equals(ticket.slot) && isUsedTicket.equals(ticket.isUsedTicket);
+    }
+
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), createdAt, userId, filmName, hallName, seatId, slot, isUsedTicket);
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "Ticket{" +
+                "createdAt=" + createdAt +
+                ", userId=" + userId +
+                ", filmName=" + filmName +
+                ", hallName=" + hallName +
+                ", seatId=" + seatId +
+                ", slot=" + slot +
+                ", isUsedTicket=" + isUsedTicket +
+                '}';
+    }
 }
