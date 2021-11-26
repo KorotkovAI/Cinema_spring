@@ -55,10 +55,15 @@ public class GenreServiceImpl implements GenreService {
     //TODO don't know how
     @Override
     public List<Film> getAllFilms(Genre genre) {
+        /*
         if (genre != null) {
             readById(genre.getId());
             return genreRepository.findById(genre.getId()).;
         }
+
+         */
         throw new NullPointerException("Genre cannot be 'null'");
     }
+
+
 }

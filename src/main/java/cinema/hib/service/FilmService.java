@@ -1,5 +1,8 @@
 package cinema.hib.service;
 
+import cinema.hib.dto.model.FilmDto;
+import cinema.hib.dto.model.GenreDto;
+import cinema.hib.dto.model.SlotDto;
 import cinema.hib.model.Film;
 import cinema.hib.model.Genre;
 import cinema.hib.model.Slot;
@@ -7,19 +10,19 @@ import cinema.hib.model.Slot;
 import java.util.List;
 
 public interface FilmService {
-    Film create(Film film);
+    FilmDto create(FilmDto filmDto);
 
-    Film readById(long id);
+    FilmDto readById(long id);
 
-    Film readByName(String name);
+    FilmDto readByName(String name);
 
-    Film update(Film film);
+    FilmDto update(FilmDto filmDto);
 
     void delete(long id);
 
-    List<Film> getAll();
+    List<FilmDto> getAll();
 
-    List<Slot> getAllSlots(Film film);
+    List<SlotDto> getAllSlots(FilmDto filmDto);
 
-    List<Genre> getAllGenres(Film film);
+    List<GenreDto> getAllGenres(FilmDto filmDto);
 }

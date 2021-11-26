@@ -1,40 +1,50 @@
 package cinema.hib.service.impl;
 
+import cinema.hib.dto.model.FilmDto;
+import cinema.hib.dto.model.GenreDto;
+import cinema.hib.dto.model.SlotDto;
 import cinema.hib.model.Film;
-import cinema.hib.model.Genre;
-import cinema.hib.model.Slot;
 import cinema.hib.repository.FilmRepository;
 import cinema.hib.service.FilmService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
-public class FilmServiceImpl implements FilmService {
+public class FilmServiceImpl {
 
-    private final FilmRepository filmRepository;
+    @Autowired
+    private FilmRepository filmRepository;
 
-    public FilmServiceImpl(FilmRepository filmRepository) {
-        this.filmRepository = filmRepository;
-    }
+   // public FilmServiceImpl() {
+     //   this.filmRepository = filmRepository;
+    //}
 
+/*
     @Override
-    public Film create(Film film) {
-        if (film != null) {
-            return filmRepository.save(film);
+    public FilmDto create(FilmDto filmDto) {
+        if (filmDto != null) {
+            if (filmDto.getName() != null) {
+                if (!filmRepository.findFilmByName(filmDto.getName()).isPresent()) {
+                    return filmRepository.save(filmDto);
+                }
+                //TODO exception to throw
+            }
+            throw new NullPointerException("Film name cannot be 'null'");
         }
         throw new NullPointerException("Film cannot be 'null'");
     }
 
     @Override
-    public Film readById(long id) {
+    public FilmDto readById(long id) {
         return filmRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Film with id " + id + " not found"));
     }
 
     @Override
-    public Film readByName(String name) {
+    public FilmDto readByName(String name) {
         if (name != null) {
             return filmRepository.findFilmByName(name).orElseThrow(
                     () -> new EntityNotFoundException("Film with name " + name + " not found"));
@@ -43,7 +53,7 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public Film update(Film film) {
+    public FilmDto update(FilmDto filmDto) {
         if (film != null) {
             readById(film.getId());
             return filmRepository.save(film);
@@ -58,13 +68,13 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<Film> getAll() {
+    public List<FilmDto> getAll() {
         return filmRepository.findAll();
     }
 //TODO I don`t know how
     
     @Override
-    public List<Slot> getAllSlots(Film film) {
+    public List<SlotDto> getAllSlots(FilmDto filmDto) {
         if (film != null) {
             readById(film.getId());
             return filmRepository.findById(film.getId()).;
@@ -73,11 +83,13 @@ public class FilmServiceImpl implements FilmService {
     }
 //TODO not right solution
     @Override
-    public List<Genre> getAllGenres(Film film) {
+    public List<GenreDto> getAllGenres(FilmDto filmDto) {
         if (film != null) {
             readById(film.getId());
             return film.getGenres();
         }
         throw new NullPointerException("Film cannot be 'null'");
     }
+
+ */
 }

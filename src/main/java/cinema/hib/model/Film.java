@@ -22,25 +22,21 @@ public class Film {
     @NotBlank(message = "The film Name cannot be empty")
     @Column(nullable = false, unique = true)
     @Setter
-    @Size(min = 3, max = 200)
+    @Size(min = 3, max = 100)
     private String name;
 
-    @NotBlank(message = "The film duration cannot be empty")
-    @NotNull
     @Setter
     private int duration;
 
-    @NotBlank(message = "The film rate cannot be empty")
-    @NotNull
     @Setter
     private double rate;
 
     @Enumerated(EnumType.ORDINAL)
+    @Setter
     private AgeLimit ageLimit;
 
-    @NotBlank(message = "The film description cannot be empty")
-    @NotNull
     @Setter
+    @Size(min = 10, max = 100)
     private String description;
 
     @ManyToMany
