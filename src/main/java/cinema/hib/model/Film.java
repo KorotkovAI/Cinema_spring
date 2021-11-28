@@ -4,6 +4,7 @@ package cinema.hib.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -13,6 +14,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "films")
 @Getter
+@Setter
 public class Film {
 
     @Id
@@ -21,31 +23,26 @@ public class Film {
 
     @NotBlank(message = "The film Name cannot be empty")
     @Column(nullable = false, unique = true)
-    @Setter
     @Size(min = 3, max = 100)
     private String name;
 
-    @Setter
+    @Min(1)
     private int duration;
 
-    @Setter
+    @Min(0)
     private double rate;
 
     @Enumerated(EnumType.ORDINAL)
-    @Setter
     private AgeLimit ageLimit;
 
-    @Setter
     @Size(min = 10, max = 100)
     private String description;
 
     @ManyToMany
-    @Setter
     @JoinColumn(name = "genres_name", referencedColumnName = "name")
     private List<Genre> genres;
 
     @OneToMany
-    @Setter
     @JoinColumn(name = "slot_id", referencedColumnName = "id")
     private List<Slot> slots;
 
@@ -64,10 +61,13 @@ public class Film {
     }
 
     @Override
-    public java.lang.String toString() {
+    public String toString() {
         return "Film{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", duration=" + duration +
+                ", rate=" + rate +
+                ", ageLimit=" + ageLimit +
                 ", description='" + description + '\'' +
                 '}';
     }

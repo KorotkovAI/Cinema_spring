@@ -20,7 +20,7 @@ public interface FilmService {
 
     void delete(long id);
 
-    List<FilmDto> getAll();
+    List<Film> getAll();
 
     List<SlotDto> getAllSlots(FilmDto filmDto);
 

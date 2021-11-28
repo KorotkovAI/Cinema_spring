@@ -18,9 +18,7 @@ public class FilmServiceImpl {
     @Autowired
     private FilmRepository filmRepository;
 
-   // public FilmServiceImpl() {
-     //   this.filmRepository = filmRepository;
-    //}
+
 
 /*
     @Override
@@ -66,13 +64,13 @@ public class FilmServiceImpl {
         Film film = readById(id);
         filmRepository.delete(film);
     }
-
-    @Override
-    public List<FilmDto> getAll() {
+*/
+    //@Override
+    public List<Film> getAll() {
         return filmRepository.findAll();
     }
 //TODO I don`t know how
-    
+ /*
     @Override
     public List<SlotDto> getAllSlots(FilmDto filmDto) {
         if (film != null) {

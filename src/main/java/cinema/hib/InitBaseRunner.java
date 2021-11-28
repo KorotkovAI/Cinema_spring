@@ -20,8 +20,9 @@ public class InitBaseRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Faker faker = new Faker(new Locale("uk"));
         filmRepository.deleteAll();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 15; i++) {
             Film film = new Film();
+            film.setId(i);
             film.setName(faker.gameOfThrones().character());
             film.setDuration(faker.random().nextInt(60, 120));
             film.setDescription(faker.internet().url());
