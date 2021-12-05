@@ -1,6 +1,7 @@
 package cinema.hib.dto.model;
 
 import cinema.hib.model.AgeLimit;
+import cinema.hib.model.Slot;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class FilmDto {
 
+    private long id;
+
     private String name;
 
     private int duration;
@@ -25,4 +28,7 @@ public class FilmDto {
     private String description;
 
     private List<GenreDto> genres;
+
+    private List<SlotDto> slots;
+
 }
