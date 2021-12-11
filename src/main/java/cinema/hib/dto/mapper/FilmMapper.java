@@ -2,11 +2,19 @@ package cinema.hib.dto.mapper;
 
 import cinema.hib.dto.model.FilmDto;
 import cinema.hib.model.Film;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
+@Component
 public class FilmMapper {
 
-    public static FilmDto toFilmDto(Film film) {
+    public List<FilmDto> toFilmDtoList(List<Film> films){
+        return films.stream().map(ent->toFilmDto(ent)).collect(Collectors.toList());
+    }
+
+    public FilmDto toFilmDto(Film film) {
         //Here must add slots and genres
         FilmDto result = new FilmDto();
         result.setId(film.getId());

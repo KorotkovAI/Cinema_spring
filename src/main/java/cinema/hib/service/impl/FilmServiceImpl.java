@@ -1,5 +1,6 @@
 package cinema.hib.service.impl;
 
+import cinema.hib.dto.mapper.FilmMapper;
 import cinema.hib.dto.model.FilmDto;
 import cinema.hib.dto.model.GenreDto;
 import cinema.hib.dto.model.SlotDto;
@@ -13,22 +14,27 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
-public class FilmServiceImpl implements FilmService{
+public class FilmServiceImpl implements FilmService {
 
     @Autowired
     private FilmRepository filmRepository;
 
+    @Resource
+    private FilmMapper mapper;
+
 
     @Override
-    public Page<Film> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+    public Page<FilmDto> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        return filmRepository.findAll(pageable);
+        Page<Film> films = filmRepository.findAll(pageable);
+        return films.map(ent->mapper.toFilmDto(ent));
     }
 }

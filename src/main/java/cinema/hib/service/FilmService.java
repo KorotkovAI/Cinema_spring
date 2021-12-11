@@ -13,5 +13,5 @@ import java.util.List;
 public interface FilmService {
 
 
-    Page<Film> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
+    Page<FilmDto> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
 }

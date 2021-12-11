@@ -1,6 +1,6 @@
 package cinema.hib.controller;
 
-import cinema.hib.dto.mapper.FilmMapper;
+
 import cinema.hib.dto.model.FilmDto;
 import cinema.hib.model.Film;
 import cinema.hib.service.impl.FilmServiceImpl;
@@ -31,13 +31,13 @@ public class FilmListController {
                                 @RequestParam("sortDir") String sortDir, Model model) {
         int pageSize = 5;
 
-        Page<Film> page = filmService.findPaginated(pageNo, pageSize, sortField, sortDir);
-        List <Film> listFilms = page.getContent();
+        Page<FilmDto> page = filmService.findPaginated(pageNo, pageSize, sortField, sortDir);
+
 
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("listFilms", listFilms);
+        model.addAttribute("listFilms", page.getContent());
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
