@@ -14,4 +14,9 @@ public interface FilmService {
 
 
     Page<FilmDto> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
-}
+
+    FilmDto getFilmById (long id);
+
+    boolean updateFilmName (FilmDto filmDto);
+
+    }

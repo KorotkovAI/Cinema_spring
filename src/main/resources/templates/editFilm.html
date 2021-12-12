@@ -19,15 +19,20 @@
             Featured
         </div>
         <div class="card-body">
-            <h5 class="card-title">ADD new film</h5>
+            <h5 class="card-title">Edit film
+                <td th:text="${film.id}"></td>
+            </h5>
             <p class="card-text">
             <div id="top-line" class="container d-flex h-auto">
                 <div class="w-75 p-3 text-start" style="background-color: #eee;">
                     Name film:
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <td th:text="${film.name}"></td>
+
+                    <a th:href="@{/filmEdit/name/{id}(id=${film.id})}" class="btn btn-primary">Update</a>
                 </div>
                 <div class="w-25 p-3 text-start" style="background-color: #eee;">
                     Film duration:
+                    <td th:text="${film.duration}"></td>
                     <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
             </div>
@@ -36,7 +41,7 @@
                     <div class="container d-flex h-auto">
                         <div class="row row-cols-1">
                             <div class="w-100 p-3" style="background-color: rgba(0,0,255,.1)">
-                                <img src="..." class="img-fluid" alt="...">
+                                <img th:src="@{/image/600x900.jpg}" class="img-fluid" alt="Sorry"/>
                                 <a href="#" class="btn btn-primary">Go somewhere</a>
                             </div>
                             <div class="w-100 p-3" style="background-color: rgba(0,0,255,.1)">

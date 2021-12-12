@@ -35,6 +35,24 @@ public class FilmServiceImpl implements FilmService {
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Film> films = filmRepository.findAll(pageable);
-        return films.map(ent->mapper.toFilmDto(ent));
+        return films.map(ent -> mapper.toFilmDto(ent));
+    }
+
+    @Override
+    public FilmDto getFilmById(long id) {
+        Film currentFilm = filmRepository.getById(id);
+        return mapper.toFilmDto(currentFilm);
+    }
+
+    @Override
+    public boolean updateFilmName(FilmDto filmDto) {
+        if (filmDto != null) {
+            Film updatedFilm = filmRepository.save(mapper.toFilm(filmDto));
+            System.out.println(updatedFilm.getName() + filmDto.getName());
+            if (updatedFilm.getName().equals(mapper.toFilm(filmDto).getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

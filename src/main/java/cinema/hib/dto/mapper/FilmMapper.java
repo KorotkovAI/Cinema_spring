@@ -4,6 +4,7 @@ import cinema.hib.dto.model.FilmDto;
 import cinema.hib.model.Film;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public class FilmMapper {
         result.setAgeLimit(filmDto.getAgeLimit());
         result.setId(filmDto.getId());
         result.setDescription(filmDto.getDescription());
-        result.setDuration(filmDto.getDuration());
+        result.setDuration((filmDto.getDuration()));
         result.setName(filmDto.getName());
         result.setRate(filmDto.getRate());
         return result;
