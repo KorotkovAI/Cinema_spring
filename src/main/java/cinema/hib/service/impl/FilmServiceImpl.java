@@ -92,4 +92,15 @@ public class FilmServiceImpl implements FilmService {
         }
         return false;
     }
+
+    @Override
+    public boolean updateFilmAgeLimit(FilmDto filmDto) {
+        if (filmDto != null) {
+            Film updatedFilm = filmRepository.save(mapper.toFilm(filmDto));
+            if (updatedFilm.getAgeLimit().equals(filmDto.getAgeLimit())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

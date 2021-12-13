@@ -53,14 +53,15 @@
                             </div>
                             <div class="w-100 p-3" style="background-color: rgba(0,0,255,.1)">
                                 Age limit:
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <div th:text="${film.ageLimit}"></div>
+                                <a th:href="@{/filmEdit/ageLimit/{id}(id=${film.id})}" class="btn btn-primary">Update</a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="center-main-part" class="w-50 p-3" style="background-color: #eee;">
                     Description:
-                    <td th:text="${filmdescription}"></td>
+                    <div th:text="${filmdescription}"></div>
                     <a th:href="@{/filmEdit/description/{id}(id=${film.id})}" class="btn btn-primary">Update</a>
                 </div>
                 <div id="right-main-part" class="w-25 p-3" style="background-color: #eee;">

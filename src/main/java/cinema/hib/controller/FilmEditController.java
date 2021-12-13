@@ -1,6 +1,7 @@
 package cinema.hib.controller;
 
 import cinema.hib.dto.model.FilmDto;
+import cinema.hib.model.AgeLimit;
 import cinema.hib.service.impl.FilmServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,7 @@ public class FilmEditController {
     public String filmEditName(@PathVariable(value = "id") long filmId, Model model) {
         FilmDto filmDto = filmService.getFilmById(filmId);
 
+        model.addAttribute("exception", null);
         model.addAttribute("paramForUpdate", "Name");
         model.addAttribute("valueForUpdate", filmDto.getName());
         return "editFilmName";
@@ -81,6 +83,7 @@ public class FilmEditController {
     public String filmEditDuration(@PathVariable(value = "id") long filmId, Model model) {
         FilmDto filmDto = filmService.getFilmById(filmId);
 
+        model.addAttribute("exception", null);
         model.addAttribute("paramForUpdate", "Duration");
         model.addAttribute("valueForUpdate", filmDto.getDuration());
         return "editFilmDuration";
@@ -136,6 +139,7 @@ public class FilmEditController {
             filmDescription = "file not found";
         }
 
+        model.addAttribute("exception", null);
         model.addAttribute("paramForUpdate", "Description");
         model.addAttribute("valueForUpdate", filmDescription);
         return "editFilmDescription";
@@ -143,7 +147,7 @@ public class FilmEditController {
 
     @PostMapping("filmEdit/description/{id}")
     public String filmEditDescriptionPost(@PathVariable(value = "id") long filmId, @RequestParam(value = "updatedDescription") String updatedDescription, Model model) {
-        String result = "editFilmName";
+        String result = "editFilmDescription";
 
         if (model.containsAttribute("exception")) {
             model.addAttribute("exception", null);
@@ -167,6 +171,47 @@ public class FilmEditController {
             }
         } else {
             model.addAttribute("paramForUpdate", "Description");
+            model.addAttribute("exception", "Bad params");
+        }
+
+        return result;
+    }
+
+    @GetMapping("filmEdit/ageLimit/{id}")
+    public String filmEditAgeLimit(@PathVariable(value = "id") long filmId, Model model) {
+        model.addAttribute("exception", null);
+        model.addAttribute("paramForUpdate", "AgeLimit");
+        model.addAttribute("valueForUpdate", AgeLimit.values());
+        return "editFilmAgeLimit";
+    }
+
+    @PostMapping("filmEdit/ageLimit/{id}")
+    public String filmEditAgeLimitPost(@PathVariable(value = "id") long filmId, @RequestParam(value = "updatedAgeLimit") String updatedAgeLimit, Model model) {
+        String result = "editFilmAgeLimit";
+        System.out.println(updatedAgeLimit);
+
+        if (model.containsAttribute("exception")) {
+            model.addAttribute("exception", null);
+        }
+        if (filmId > 0 && updatedAgeLimit != null) {
+            FilmDto filmDto = filmService.getFilmById(filmId);
+            filmDto.setAgeLimit(AgeLimit.valueOf(updatedAgeLimit));
+
+            boolean status = false;
+            try {
+                status = filmService.updateFilmAgeLimit(filmDto);
+            } catch (Exception e) {
+                model.addAttribute("exception", e.getMessage());
+            }
+
+            if (status) {
+                result = "redirect:/filmEdit/" + filmId;
+            } else {
+                model.addAttribute("paramForUpdate", "AgeLimit");
+                model.addAttribute("valueForUpdate", filmDto.getAgeLimit());
+            }
+        } else {
+            model.addAttribute("paramForUpdate", "AgeLimit");
             model.addAttribute("exception", "Bad params");
         }
 

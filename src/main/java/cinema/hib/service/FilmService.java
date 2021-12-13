@@ -19,4 +19,7 @@ public interface FilmService {
     String uploadDescriptionFromFile (String url) throws IOException;
 
     boolean downloadDescriptionToFile (String url, String description) throws IOException;
+
+    boolean updateFilmAgeLimit (FilmDto filmDto);
+
 }
