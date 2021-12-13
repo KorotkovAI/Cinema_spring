@@ -31,9 +31,16 @@
                     <a th:href="@{/filmEdit/name/{id}(id=${film.id})}" class="btn btn-primary">Update</a>
                 </div>
                 <div class="w-25 p-3 text-start" style="background-color: #eee;">
-                    Film duration:
-                    <td th:text="${film.duration}"></td>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <div>
+                        Film duration:
+                        <td th:text="${film.duration / 3600}"></td>
+                        hs
+                        <td th:text="${film.duration/60 - (film.duration/3600)*60}"></td>
+                        min
+                        <td th:text="${film.duration - (film.duration/60)*60}"></td>
+                        sc
+                    </div>
+                    <a th:href="@{/filmEdit/duration/{id}(id=${film.id})}" class="btn btn-primary">Update</a>
                 </div>
             </div>
             <div class="container d-flex h-auto">
@@ -53,7 +60,8 @@
                 </div>
                 <div id="center-main-part" class="w-50 p-3" style="background-color: #eee;">
                     Description:
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <td th:text="${filmdescription}"></td>
+                    <a th:href="@{/filmEdit/description/{id}(id=${film.id})}" class="btn btn-primary">Update</a>
                 </div>
                 <div id="right-main-part" class="w-25 p-3" style="background-color: #eee;">
                     <div class="container d-flex h-auto">

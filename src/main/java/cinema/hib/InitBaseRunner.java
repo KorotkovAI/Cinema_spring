@@ -25,7 +25,7 @@ public class InitBaseRunner implements CommandLineRunner {
             film.setId(i);
             film.setName(faker.gameOfThrones().character());
             film.setDuration(faker.random().nextInt(60, 120));
-            film.setDescription(faker.internet().url());
+            film.setDescription("static/description/1.txt");
             film.setRate(Math.random());
             film.setAgeLimit(AgeLimit.FROM16);
             filmRepository.save(film);

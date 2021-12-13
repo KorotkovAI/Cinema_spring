@@ -1,14 +1,9 @@
 package cinema.hib.service;
 
 import cinema.hib.dto.model.FilmDto;
-import cinema.hib.dto.model.GenreDto;
-import cinema.hib.dto.model.SlotDto;
-import cinema.hib.model.Film;
-import cinema.hib.model.Genre;
-import cinema.hib.model.Slot;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
+import java.io.IOException;
 
 public interface FilmService {
 
@@ -19,4 +14,9 @@ public interface FilmService {
 
     boolean updateFilmName (FilmDto filmDto);
 
-    }
+    boolean updateFilmDuration (FilmDto filmDto);
+
+    String uploadDescriptionFromFile (String url) throws IOException;
+
+    boolean downloadDescriptionToFile (String url, String description) throws IOException;
+}

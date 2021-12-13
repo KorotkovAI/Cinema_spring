@@ -48,7 +48,14 @@
                 <tr th:each="film: ${listFilms}">
                     <td th:text="${film.id}"></td>
                     <td th:text="${film.name}"></td>
-                    <td th:text="${film.duration}"></td>
+                    <td>
+                    <b th:text="${film.duration / 3600}"></b>
+                    hs
+                    <b th:text="${film.duration/60 - (film.duration/3600)*60}"></b>
+                    min
+                    <b th:text="${film.duration - (film.duration/60)*60}"></b>
+                    sc
+                    </td>
                     <td th:text="${film.ageLimit}"></td>
                     <td th:text="${film.genres}"></td>
                     <td>
