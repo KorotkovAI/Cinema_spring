@@ -1,6 +1,7 @@
 package cinema.hib.dto.mapper;
 
 import cinema.hib.dto.model.FilmDto;
+import cinema.hib.model.AgeLimit;
 import cinema.hib.model.Film;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ public class FilmMapper {
         FilmDto result = new FilmDto();
         result.setId(film.getId());
         result.setDescription(film.getDescription());
-        result.setAgeLimit(film.getAgeLimit());
+        result.setAgeLimit(film.getAgeLimit().toString());
         result.setName(film.getName());
         result.setRate(film.getRate());
         result.setDuration(film.getDuration());
@@ -30,7 +31,7 @@ public class FilmMapper {
     public Film toFilm(FilmDto filmDto) {
         //Here must add slots and genres
         Film result = new Film();
-        result.setAgeLimit(filmDto.getAgeLimit());
+        result.setAgeLimit(AgeLimit.valueOf(filmDto.getAgeLimit()));
         result.setId(filmDto.getId());
         result.setDescription(filmDto.getDescription());
         result.setDuration((filmDto.getDuration()));

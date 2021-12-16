@@ -18,7 +18,7 @@ public class FilmEditController {
 
     @Autowired
     FilmServiceImpl filmService;
-
+/*
     @GetMapping("filmEdit/{id}")
     public String filmEditPage(@PathVariable(value = "id") long filmId, Model model) {
         FilmDto filmDto = filmService.getFilmById(filmId);
@@ -36,6 +36,7 @@ public class FilmEditController {
         return "editFilm";
     }
 
+ */
     @GetMapping("filmEdit/name/{id}")
     public String filmEditName(@PathVariable(value = "id") long filmId, Model model) {
         FilmDto filmDto = filmService.getFilmById(filmId);
@@ -126,7 +127,7 @@ public class FilmEditController {
 
         return result;
     }
-
+/*
     @GetMapping("filmEdit/description/{id}")
     public String filmEditDescription(@PathVariable(value = "id") long filmId, Model model) {
         FilmDto filmDto = filmService.getFilmById(filmId);
@@ -145,6 +146,8 @@ public class FilmEditController {
         return "editFilmDescription";
     }
 
+ */
+/*
     @PostMapping("filmEdit/description/{id}")
     public String filmEditDescriptionPost(@PathVariable(value = "id") long filmId, @RequestParam(value = "updatedDescription") String updatedDescription, Model model) {
         String result = "editFilmDescription";
@@ -176,6 +179,7 @@ public class FilmEditController {
 
         return result;
     }
+ */
 
     @GetMapping("filmEdit/ageLimit/{id}")
     public String filmEditAgeLimit(@PathVariable(value = "id") long filmId, Model model) {
@@ -185,36 +189,5 @@ public class FilmEditController {
         return "editFilmAgeLimit";
     }
 
-    @PostMapping("filmEdit/ageLimit/{id}")
-    public String filmEditAgeLimitPost(@PathVariable(value = "id") long filmId, @RequestParam(value = "updatedAgeLimit") String updatedAgeLimit, Model model) {
-        String result = "editFilmAgeLimit";
-        System.out.println(updatedAgeLimit);
 
-        if (model.containsAttribute("exception")) {
-            model.addAttribute("exception", null);
-        }
-        if (filmId > 0 && updatedAgeLimit != null) {
-            FilmDto filmDto = filmService.getFilmById(filmId);
-            filmDto.setAgeLimit(AgeLimit.valueOf(updatedAgeLimit));
-
-            boolean status = false;
-            try {
-                status = filmService.updateFilmAgeLimit(filmDto);
-            } catch (Exception e) {
-                model.addAttribute("exception", e.getMessage());
-            }
-
-            if (status) {
-                result = "redirect:/filmEdit/" + filmId;
-            } else {
-                model.addAttribute("paramForUpdate", "AgeLimit");
-                model.addAttribute("valueForUpdate", filmDto.getAgeLimit());
-            }
-        } else {
-            model.addAttribute("paramForUpdate", "AgeLimit");
-            model.addAttribute("exception", "Bad params");
-        }
-
-        return result;
-    }
 }

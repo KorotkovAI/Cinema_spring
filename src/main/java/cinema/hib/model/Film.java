@@ -35,6 +35,7 @@ public class Film {
     @Enumerated(EnumType.ORDINAL)
     private AgeLimit ageLimit;
 
+    @Column(nullable = false)
     @Size(min = 10, max = 100)
     private String description;
 

@@ -24,7 +24,7 @@ public class FilmDto {
 
     private double rate;
 
-    private AgeLimit ageLimit;
+    private String ageLimit;
 
     private String description;
 

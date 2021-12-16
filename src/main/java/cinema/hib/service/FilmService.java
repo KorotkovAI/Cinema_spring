@@ -16,10 +16,7 @@ public interface FilmService {
 
     boolean updateFilmDuration (FilmDto filmDto);
 
-    String uploadDescriptionFromFile (String url) throws IOException;
+    boolean updateFilmAgeLimit(FilmDto filmDto);
 
-    boolean downloadDescriptionToFile (String url, String description) throws IOException;
-
-    boolean updateFilmAgeLimit (FilmDto filmDto);
-
+    FilmDto saveFilm (FilmDto filmDto);
 }
