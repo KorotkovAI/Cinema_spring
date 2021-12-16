@@ -1,22 +1,28 @@
 package cinema.hib.service.impl;
 
+import cinema.hib.dto.mapper.FilmMapper;
+import cinema.hib.dto.mapper.GenreMapper;
+import cinema.hib.dto.model.GenreDto;
 import cinema.hib.model.Film;
 import cinema.hib.model.Genre;
+import cinema.hib.repository.FilmRepository;
 import cinema.hib.repository.GenreRepository;
 import cinema.hib.service.GenreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    private final GenreRepository genreRepository;
+    @Autowired
+    private GenreRepository genreRepository;
 
-    public GenreServiceImpl(GenreRepository genreRepository) {
-        this.genreRepository = genreRepository;
-    }
+    @Resource
+    private GenreMapper genreMapper;
 
     @Override
     public Genre create(Genre genre) {
@@ -48,8 +54,8 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public List<Genre> getAll() {
-        return genreRepository.findAll();
+    public List<GenreDto> getAll() {
+        return genreMapper.toGenreDtoList(genreRepository.findAll());
     }
 
     //TODO don't know how

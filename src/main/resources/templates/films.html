@@ -18,7 +18,7 @@
             <div class="col"></div>
             <div class="display-6 text-white col">FILMS</div>
             <div class="col d-flex justify-content-end align-items-center p-0">
-                <a class="btn btn-success" href="@{filmCreate}" role="button">ADD</a>
+                <a class="btn btn-success" th:href="@{add/}" role="button">ADD</a>
             </div>
 
         </div>
@@ -58,7 +58,7 @@
                     <td th:text="${film.ageLimit}"></td>
                     <td th:text="${film.genres}"></td>
                     <td>
-                        <a class="btn btn-primary" th:href="@{filmEdit/{id}(id=${film.id})}" role="button">Edit</a>
+                        <a class="btn btn-primary" th:href="@{edit/{id}(id=${film.id})}" role="button">Edit</a>
                     </td>
                     <td>
                         <a class="btn btn-primary" th:href="@{filmDelete/{id}(id=${film.id})}" role="button">Delete</a>

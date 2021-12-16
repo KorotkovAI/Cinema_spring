@@ -12,6 +12,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "genres")
 @Getter
+@Setter
 public class Genre {
 
     @Id
@@ -20,12 +21,10 @@ public class Genre {
 
     @NotBlank(message = "The film genre cannot be empty")
     @Column(nullable = false, unique = true)
-    @Setter
     @Size(min = 3, max = 50)
     private String name;
 
     @ManyToMany
-    @Setter
     private List<Film> films;
 
     @Override

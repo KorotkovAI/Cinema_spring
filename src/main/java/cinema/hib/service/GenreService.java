@@ -1,5 +1,6 @@
 package cinema.hib.service;
 
+import cinema.hib.dto.model.GenreDto;
 import cinema.hib.model.Film;
 import cinema.hib.model.Genre;
 
@@ -14,7 +15,7 @@ public interface GenreService {
 
     void delete(int id);
 
-    List<Genre> getAll();
+    List<GenreDto> getAll();
 
     List<Film> getAllFilms(Genre genre);
 }

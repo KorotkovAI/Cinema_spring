@@ -2,7 +2,9 @@ package cinema.hib;
 
 import cinema.hib.model.AgeLimit;
 import cinema.hib.model.Film;
+import cinema.hib.model.Genre;
 import cinema.hib.repository.FilmRepository;
+import cinema.hib.repository.GenreRepository;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -15,6 +17,9 @@ public class InitBaseRunner implements CommandLineRunner {
 
     @Autowired
     FilmRepository filmRepository;
+
+    @Autowired
+    GenreRepository genreRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -30,5 +35,14 @@ public class InitBaseRunner implements CommandLineRunner {
             film.setAgeLimit(AgeLimit.FROM16);
             filmRepository.save(film);
         }
+
+        genreRepository.deleteAll();
+        for (int i = 0; i < 5; i++) {
+            Genre genre = new Genre();
+            genre.setName(faker.dog().name());
+            genre.setId(i);
+            genreRepository.save(genre);
+        }
+
     }
 }
