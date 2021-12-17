@@ -3,8 +3,6 @@ package cinema.hib.service;
 import cinema.hib.dto.model.FilmDto;
 import org.springframework.data.domain.Page;
 
-import java.io.IOException;
-
 public interface FilmService {
 
 

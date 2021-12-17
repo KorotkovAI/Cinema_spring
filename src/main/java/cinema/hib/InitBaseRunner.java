@@ -3,8 +3,10 @@ package cinema.hib;
 import cinema.hib.model.AgeLimit;
 import cinema.hib.model.Film;
 import cinema.hib.model.Genre;
+import cinema.hib.model.Hall;
 import cinema.hib.repository.FilmRepository;
 import cinema.hib.repository.GenreRepository;
+import cinema.hib.repository.HallRepository;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -20,6 +22,9 @@ public class InitBaseRunner implements CommandLineRunner {
 
     @Autowired
     GenreRepository genreRepository;
+
+    @Autowired
+    HallRepository hallRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -39,10 +44,19 @@ public class InitBaseRunner implements CommandLineRunner {
         genreRepository.deleteAll();
         for (int i = 0; i < 5; i++) {
             Genre genre = new Genre();
-            genre.setName(faker.dog().name());
+            genre.setName(faker.dog().name() + "grdtrd");
             genre.setId(i);
             genreRepository.save(genre);
         }
 
+        hallRepository.deleteAll();
+        Hall hall1 = new Hall();
+        hall1.setId(1);
+        hall1.setName("First");
+        hallRepository.save(hall1);
+        Hall hall2 = new Hall();
+        hall2.setId(2);
+        hall2.setName("Second");
+        hallRepository.save(hall2);
     }
 }

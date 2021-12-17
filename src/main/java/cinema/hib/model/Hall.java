@@ -12,20 +12,19 @@ import java.util.Objects;
 @Entity
 @Table(name = "halls")
 @Getter
+@Setter
 public class Hall {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Setter
     @NotBlank(message = "Name of the hall cannot be empty")
     @Column(nullable = false, unique = true)
     @Size(min = 3, max = 25)
     private String name;
 
     @OneToMany
-    @Setter
     @JoinColumn(name = "seat_id", referencedColumnName = "id")
     private List <Seat> seats;
 

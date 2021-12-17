@@ -27,7 +27,7 @@ public class GenreMapper {
 
     public Genre toGenre(GenreDto genreDto) {
         Genre result = new Genre();
-        result.setId(result.getId());
+        result.setId(genreDto.getId());
         result.setName(genreDto.getName());
         return result;
     }
