@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class FilmServiceImpl implements FilmService {
@@ -80,5 +81,11 @@ public class FilmServiceImpl implements FilmService {
             return mapper.toFilmDto(film);
         }
         return null;
+    }
+
+    @Override
+    public List<FilmDto> findAll() {
+        List<Film> films = filmRepository.findAll();
+        return mapper.toFilmDtoList(films);
     }
 }

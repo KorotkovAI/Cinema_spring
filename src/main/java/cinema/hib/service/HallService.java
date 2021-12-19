@@ -9,4 +9,6 @@ import java.util.List;
 public interface HallService {
 
     List<HallDto> getAll();
+
+    HallDto getHallById(int id);
 }

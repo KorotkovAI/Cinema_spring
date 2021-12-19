@@ -15,9 +15,10 @@
 <div class="container bg-white mt-5 w-25 p-0 rounded-2">
     <div class="card text-center border-0">
         <div class="card-header bg-dark row  m-0">
-            <div class="display-6 text-white">Shedule hall</div>
+            <div class="display-6 text-white">Shedule hall <td th:text="${hallName}"></td></div>
         </div>
         <div class="card-body">
+            <div th:if="${exception != null}" style="color: red;" th:text="${exception}"></div>
             <form name="dateform" method="post">
                 <div id="wrapper">
                     <label>Date: </label>

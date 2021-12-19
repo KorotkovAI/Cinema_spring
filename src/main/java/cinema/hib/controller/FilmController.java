@@ -68,7 +68,6 @@ public class FilmController {
         } catch (javax.validation.ConstraintViolationException e) {
             ConstraintViolation<?> problem = e.getConstraintViolations().stream().findFirst().get();
             String exception = problem.getPropertyPath().toString() + " " + e.getConstraintViolations().stream().findFirst().get().getMessage();
-            System.out.println(problem.getPropertyPath().toString());
             redirectAttributes.addFlashAttribute("exception", exception);
             result = "redirect:/films/add";
         }

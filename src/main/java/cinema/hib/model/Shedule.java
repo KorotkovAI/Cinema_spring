@@ -10,17 +10,16 @@ import java.util.Objects;
 @Entity
 @Table(name = "shedule")
 @Getter
+@Setter
 public class Shedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Setter
     @OneToOne
     private Hall hall;
 
-    @Setter
     @OneToMany
     private List<Slot> slots;
 

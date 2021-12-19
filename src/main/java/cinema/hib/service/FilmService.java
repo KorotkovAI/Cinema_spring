@@ -3,6 +3,8 @@ package cinema.hib.service;
 import cinema.hib.dto.model.FilmDto;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface FilmService {
 
 
@@ -17,4 +19,6 @@ public interface FilmService {
     boolean updateFilmAgeLimit(FilmDto filmDto);
 
     FilmDto saveFilm (FilmDto filmDto);
+
+    List<FilmDto> findAll();
 }

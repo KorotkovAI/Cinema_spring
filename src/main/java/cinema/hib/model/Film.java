@@ -6,7 +6,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
@@ -27,6 +26,7 @@ public class Film {
     private String name;
 
     @Min(1)
+    @Column(nullable = false)
     private int duration;
 
     @Min(0)

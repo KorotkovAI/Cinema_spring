@@ -13,6 +13,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "slots")
 @Getter
+@Setter
 public class Slot {
 
     @Id
@@ -21,21 +22,17 @@ public class Slot {
 
     @NotBlank
     @NotNull(message = "The date of film cannot be empty")
-    @Setter
     private LocalDate dateOfFilm;
 
     @NotBlank
     @NotNull(message = "The time start of film cannot be empty")
-    @Setter
     private LocalTime startTime;
 
     @NotBlank
     @NotNull(message = "The end time of film cannot be empty")
-    @Setter
     private LocalTime endTime;
 
     @ManyToOne
-    @Setter
     @JoinColumn(name = "films_name", referencedColumnName = "name")
     private Film film;
 

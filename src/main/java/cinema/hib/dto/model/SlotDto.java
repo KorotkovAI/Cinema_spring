@@ -15,12 +15,14 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class SlotDto {
 
+    private long id;
+
     private LocalDate dateOfFilm;
 
     private LocalTime startTime;
 
     private LocalTime endTime;
 
-    private Film film;
+    private FilmDto film;
 
 }
