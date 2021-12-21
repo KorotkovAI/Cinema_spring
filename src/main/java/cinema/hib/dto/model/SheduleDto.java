@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Getter
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SheduleDto {
 
+    @Min(0)
     private long id;
 
     private HallDto hallDto;

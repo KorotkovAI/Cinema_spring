@@ -1,11 +1,11 @@
 package cinema.hib.dto.model;
 
-import cinema.hib.model.Film;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -15,6 +15,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class SlotDto {
 
+    @Min(0)
     private long id;
 
     private LocalDate dateOfFilm;

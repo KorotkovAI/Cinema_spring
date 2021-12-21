@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Getter
@@ -15,8 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 public class FilmPriceDto {
 
+    @Min(0)
     private long id;
 
+    @Min(0)
     private double price;
 
     private List<SeatDto> seat;
