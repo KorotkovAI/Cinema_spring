@@ -18,9 +18,11 @@ public class Shedule {
     private long id;
 
     @OneToOne
+    @JoinColumn(name = "hall_id", referencedColumnName = "id")
     private Hall hall;
 
     @OneToMany
+    @JoinColumn(name = "slot_id", referencedColumnName = "id")
     private List<Slot> slots;
 
     @Override

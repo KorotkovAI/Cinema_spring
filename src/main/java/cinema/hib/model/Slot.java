@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -20,16 +18,13 @@ public class Slot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank
-    @NotNull(message = "The date of film cannot be empty")
+    @Column(nullable = false)
     private LocalDate dateOfFilm;
 
-    @NotBlank
-    @NotNull(message = "The time start of film cannot be empty")
+    @Column(nullable = false)
     private LocalTime startTime;
 
-    @NotBlank
-    @NotNull(message = "The end time of film cannot be empty")
+    @Column(nullable = false)
     private LocalTime endTime;
 
     @ManyToOne

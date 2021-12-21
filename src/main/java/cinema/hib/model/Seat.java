@@ -4,65 +4,73 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
 @Table(name = "seats")
 @Getter
+@Setter
 public class Seat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull
-    @NotBlank(message = "Raw number cannot be empty")
-    @Setter
+    @Column(nullable = false)
+    @Min(0)
     private int raw;
 
-    @NotNull
-    @NotBlank(message = "Place number in raw cannot be empty")
-    @Setter
+    @Column(nullable = false)
+    @Min(0)
     private int place;
 
-    @NotNull
-    @NotBlank(message = "Place number in raw cannot be empty")
-    @Setter
-    private double price;
-
     @Enumerated(EnumType.ORDINAL)
-    @Setter
+    @Column(nullable = false)
     private SeatType seatType;
 
-    @Setter
-    private String hall;
+    @ManyToOne
+    @JoinColumn(name = "hall_id", referencedColumnName = "id")
+    private Hall hall;
+
+    @ManyToOne
+    @JoinColumn(name = "filmPrice_id", referencedColumnName = "id")
+    private FilmPrice filmPrice;
 
     @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
-        Seat seat = (Seat) object;
-        return raw == seat.raw && place == seat.place && java.lang.Double.compare(seat.price, price) == 0
-                && seatType.equals(seat.seatType) && hall.equals(seat.hall);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Seat seat = (Seat) o;
+        return id == seat.id && raw == seat.raw && place == seat.place && seatType == seat.seatType && hall.equals(seat.hall);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), raw, place, price, seatType, hall);
+        return Objects.hash(id, raw, place, seatType, hall);
     }
 
-    @Override
-    public java.lang.String toString() {
-        return "Seat{" +
-                "id=" + id +
-                ", raw=" + raw +
-                ", place=" + place +
-                ", price=" + price +
-                ", seatType=" + seatType +
-                ", hall='" + hall + '\'' +
-                '}';
+
+    @ManyToOne(optional = false)
+    private FilmPrice filmPrices;
+
+    public FilmPrice getFilmPrices() {
+        return filmPrices;
+    }
+
+    public void setFilmPrices(FilmPrice filmPrices) {
+        this.filmPrices = filmPrices;
+    }
+
+    @ManyToOne(optional = false)
+    private FilmPrice filmPrices2;
+
+    public FilmPrice getFilmPrices2() {
+        return filmPrices2;
+    }
+
+    public void setFilmPrices2(FilmPrice filmPrices2) {
+        this.filmPrices2 = filmPrices2;
     }
 }

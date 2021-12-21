@@ -82,4 +82,13 @@ public class SheduleServiceImpl implements SheduleService {
         }
         return false;
     }
+
+    @Override
+    public SheduleDto getSheduleBySlot(SlotDto slotDto) {
+        if (slotDto != null) {
+            Shedule shedule = sheduleRepository.getSheduleBySlotsContains(slotMapper.toSlot(slotDto));
+            return sheduleMapper.toSheduleDto(shedule);
+        }
+        return null;
+    }
 }

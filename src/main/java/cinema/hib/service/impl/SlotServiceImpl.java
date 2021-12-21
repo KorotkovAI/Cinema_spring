@@ -60,4 +60,14 @@ public class SlotServiceImpl implements SlotService {
         }
         return false;
     }
+
+    @Override
+    public SlotDto getSlotById(long id) {
+
+        if (id > -1) {
+            Slot slot = slotRepository.getById(id);
+            return slotMapper.toSlotDto(slot);
+        }
+        return null;
+    }
 }

@@ -1,20 +1,12 @@
 package cinema.hib.controller;
 
-import cinema.hib.dto.model.FilmDto;
-import cinema.hib.dto.model.HallDto;
-import cinema.hib.dto.model.SheduleDto;
-import cinema.hib.dto.model.SlotDto;
-import cinema.hib.service.impl.FilmServiceImpl;
-import cinema.hib.service.impl.HallServiceImpl;
-import cinema.hib.service.impl.SheduleServiceImpl;
-import cinema.hib.service.impl.SlotServiceImpl;
+import cinema.hib.dto.model.*;
+import cinema.hib.model.SeatType;
+import cinema.hib.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +31,9 @@ public class SheduleController {
 
     @Autowired
     SlotServiceImpl slotService;
+
+    @Autowired
+    FilmPriceServiceImpl filmPriceService;
 
     @GetMapping("/halls")
     public String hallsInShedule(Model model) {
@@ -134,7 +129,7 @@ public class SheduleController {
             SlotDto resultSlot = slotService.saveSlot(slotDto);
             System.out.println("222");
             System.out.println(resultSlot);
-            boolean resultUpdating = false;
+            boolean resultUpdating;
             resultUpdating = sheduleService.updateShedule(hallService.getHallById(hallId), resultSlot);
             System.out.println(resultUpdating);
             if (!resultUpdating) {
@@ -152,6 +147,23 @@ public class SheduleController {
         }
 
         return result;
+    }
+
+    @GetMapping("slot/editPrice/{id}")
+    public String editPrice(@PathVariable(value = "id") long slotId, Model model) {
+        if (!model.containsAttribute("exception")) {
+            model.addAttribute("exception", null);
+        }
+
+        SlotDto slotDto = slotService.getSlotById(slotId);
+        SheduleDto sheduleDto = sheduleService.getSheduleBySlot(slotDto);
+        List<FilmPriceDto> filmPriceDtoList = filmPriceService.getBySlot(slotDto);
+//TODO can`t get seatType from film
+        //List<SeatDto> seatTypes = filmPriceDtoList.stream().map(ent -> ent.getSeat()).collect(Collectors.toList());
+        model.addAttribute("hall", sheduleDto.getHallDto());
+        model.addAttribute("slot", slotDto);
+        model.addAttribute("typeSeats", SeatType.values());
+        return "editPriceSlot";
     }
 
 

@@ -12,6 +12,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "tickets")
 @Getter
+@Setter
 @EqualsAndHashCode
 @ToString
 public class Ticket {
@@ -20,7 +21,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     public Ticket() {
@@ -29,26 +30,21 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @Setter
     private User userId;
 
     @ManyToOne
-    @Setter
     @JoinColumn(name = "films_name", referencedColumnName = "name")
     private Film filmName;
 
     @ManyToOne
-    @Setter
     @JoinColumn(name = "halls_name", referencedColumnName = "name")
     private Hall hallName;
 
     @ManyToOne
-    @Setter
     @JoinColumn(name = "seats_id", referencedColumnName = "id")
     private Seat seatId;
 
     @ManyToOne
-    @Setter
     @JoinColumn(name = "slots_id", referencedColumnName = "id")
     private Slot slot;
 

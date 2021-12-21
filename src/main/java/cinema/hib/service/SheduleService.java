@@ -14,4 +14,6 @@ public interface SheduleService {
     List<SlotDto> getSlotsCurrentDate(SheduleDto sheduleDto, LocalDate date);
 
     boolean updateShedule(HallDto hallDto, SlotDto slotDto);
+
+    SheduleDto getSheduleBySlot(SlotDto slotDto);
 }

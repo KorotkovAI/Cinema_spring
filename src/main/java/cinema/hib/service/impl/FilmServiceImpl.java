@@ -37,8 +37,11 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public FilmDto getFilmById(long id) {
-        Film currentFilm = filmRepository.getById(id);
-        return mapper.toFilmDto(currentFilm);
+        if (id > -1) {
+            Film currentFilm = filmRepository.getById(id);
+            return mapper.toFilmDto(currentFilm);
+        }
+        return null;
     }
 
     @Override

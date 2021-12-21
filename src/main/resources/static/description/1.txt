@@ -1,8 +1,0 @@
-﻿http://proglang.su/java/installation-and-configuration-on-a-pc
-tutorial
-
-https://docs.oracle.com/en/java/javase/15/index.html
-JDK documentation
-
-https://unicode-table.com/
-unicod table for Java char primitive

@@ -12,13 +12,13 @@ import lombok.ToString;
 @NoArgsConstructor
 public class SeatDto {
 
+    private int id;
+
     private int raw;
 
     private int place;
 
-    private double price;
-
     private SeatType seatType;
 
-    private String hall;
+    private HallDto hall;
 }

@@ -31,7 +31,7 @@
                     <th scope="col">StartTime</th>
                     <th scope="col">EndTime</th>
                     <th scope="col">Film</th>
-                    <th scope="col-2">Operations</th>
+                    <th scope="col-3">Operations</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -41,10 +41,13 @@
                     <td th:text="${slot.endTime}"></td>
                     <td th:text="${slot.film.name}"></td>
                     <td>
-                        <a class="btn btn-primary" th:href="@{slot/edit/{id}(id=${slot.id})}" role="button">Edit</a>
+                        <a class="btn btn-primary" th:href="@{slot/edit/{id}(id=${slot.id})}" role="button">Edit Slot</a>
                     </td>
                     <td>
                         <a class="btn btn-primary" th:href="@{slot/delete/{id}(id=${slot.id})}" role="button">Delete</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" th:href="@{slot/editPrice/{id}(id=${slot.id})}" role="button">Edit price</a>
                     </td>
                 </tr>
                 </tbody>
