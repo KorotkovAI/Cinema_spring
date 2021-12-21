@@ -1,6 +1,8 @@
 package cinema.hib.controller;
 
 import cinema.hib.dto.model.FilmDto;
+import cinema.hib.dto.model.FilmDtoShort;
+import cinema.hib.dto.model.GenreDto;
 import cinema.hib.model.AgeLimit;
 import cinema.hib.service.impl.FilmServiceImpl;
 import cinema.hib.service.impl.GenreServiceImpl;
@@ -8,11 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("films")
@@ -53,23 +58,26 @@ public class FilmController {
         if (!model.containsAttribute("exception")) {
             model.addAttribute("exception", null);
         }
-        model.addAttribute("film", new FilmDto());
+
+        List<GenreDto> genreDtos = genreService.getAll();
+        model.addAttribute("film", new FilmDtoShort());
         model.addAttribute("limits", AgeLimit.values());
+        model.addAttribute("genres", genreDtos);
 
         return "addFilm";
     }
 
     @PostMapping("/add")
-    public String saveNewFilm(FilmDto dto, RedirectAttributes redirectAttributes) {
+    public String saveNewFilm(@Valid @ModelAttribute("film") FilmDtoShort dto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         String result = "redirect:/films/all";
 
-        try {
-            filmService.saveFilm(dto);
-        } catch (javax.validation.ConstraintViolationException e) {
-            ConstraintViolation<?> problem = e.getConstraintViolations().stream().findFirst().get();
-            String exception = problem.getPropertyPath().toString() + " " + e.getConstraintViolations().stream().findFirst().get().getMessage();
-            redirectAttributes.addFlashAttribute("exception", exception);
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            List<String> exceptions = errors.stream().map(ent -> ent.getDefaultMessage()).collect(Collectors.toList());
+            redirectAttributes.addFlashAttribute("exception", exceptions);
             result = "redirect:/films/add";
+        } else {
+            filmService.saveDtoShortToFilm(dto);
         }
 
         return result;
@@ -85,27 +93,22 @@ public class FilmController {
         if (!model.containsAttribute("exception")) {
             model.addAttribute("exception", null);
         }
+
         return "editFilm";
     }
 
     @PostMapping("edit/{id}")
-    public String saveEditedFilm(@PathVariable(value = "id") int filmId, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+    public String saveEditedFilm(@PathVariable(value = "id") int filmId, @Valid @ModelAttribute("film") FilmDto dto,
+                                 BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         String result = "redirect:/films/all";
-        System.out.println(request.getParameter("name"));
-        System.out.println(request.getParameter("genreUsed"));
-        System.out.println(request.getParameter("duration"));
-        System.out.println(request.getParameter("ageLimit"));
-        System.out.println(request.getParameter("description"));
-        System.out.println(request.getParameter("genre"));
-        System.out.println(request.getParameter("genres"));
-        try {
-           // filmService.saveFilm(dto);
-        } catch (javax.validation.ConstraintViolationException e) {
-            ConstraintViolation<?> problem = e.getConstraintViolations().stream().findFirst().get();
-            String exception = problem.getPropertyPath().toString() + " " + e.getConstraintViolations().stream().findFirst().get().getMessage();
-            System.out.println(problem.getPropertyPath().toString());
-            redirectAttributes.addFlashAttribute("exception", exception);
+
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            List<String> exceptions = errors.stream().map(ent -> ent.getDefaultMessage()).collect(Collectors.toList());
+            redirectAttributes.addFlashAttribute("exception", exceptions);
             result = "redirect:/films/edit/" + filmId;
+        } else {
+            filmService.saveDtoToFilm(dto);
         }
 
         return result;

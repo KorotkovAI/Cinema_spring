@@ -4,17 +4,18 @@ import cinema.hib.dto.model.GenreDto;
 import cinema.hib.model.Genre;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class GenreMapper {
 
-    public List<GenreDto> toGenreDtoList(List<Genre> genres){
+    public List<GenreDto> toGenreDtoList(@NotNull List<Genre> genres){
         return genres.stream().map(ent->toGenreDto(ent)).collect(Collectors.toList());
     }
 
-    public List<Genre> toGenreList(List<GenreDto> genreDtoList) {
+    public List<Genre> toGenreList(@NotNull List<GenreDto> genreDtoList) {
         return genreDtoList.stream().map(ent->toGenre(ent)).collect(Collectors.toList());
     }
 

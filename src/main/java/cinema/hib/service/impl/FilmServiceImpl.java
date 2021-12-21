@@ -2,6 +2,7 @@ package cinema.hib.service.impl;
 
 import cinema.hib.dto.mapper.FilmMapper;
 import cinema.hib.dto.model.FilmDto;
+import cinema.hib.dto.model.FilmDtoShort;
 import cinema.hib.model.Film;
 import cinema.hib.repository.FilmRepository;
 import cinema.hib.service.FilmService;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Service
@@ -78,12 +80,15 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public FilmDto saveFilm(FilmDto filmDto) {
-        if (filmDto != null) {
-            Film film = filmRepository.save(mapper.toFilm(filmDto));
+    public FilmDto saveDtoShortToFilm(@NotNull FilmDtoShort filmDto) {
+            Film film = filmRepository.save(mapper.toFilmFromShort(filmDto));
             return mapper.toFilmDto(film);
-        }
-        return null;
+    }
+
+    @Override
+    public FilmDto saveDtoToFilm(@NotNull FilmDto filmDto) {
+        Film film = filmRepository.save(mapper.toFilm(filmDto));
+        return mapper.toFilmDto(film);
     }
 
     @Override
