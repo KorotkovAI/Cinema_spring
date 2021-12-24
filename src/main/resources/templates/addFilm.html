@@ -20,10 +20,10 @@
                 <h5 class="card-title">ADD new film</h5>
             </div>
             <div class="card-body">
-                <div th:if="${exception != null}" style="color: red;" th:text="${exception}"></div>
                 <div class=" mb-3">
                     <label class="form-label">Film Title</label>
                     <input type="text" th:field="*{name}" class="form-control" placeholder="some film title">
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"> </span>
                 </div>
                 <div class="row">
 
@@ -31,7 +31,7 @@
                     <div class="col-4  mb-3">
                         <label class="form-label">Duration </label>
                         <input type="number" th:field="*{duration}" class="form-control" placeholder="in seconds">
-
+                        <span th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}" style="color: red;"> </span>
                     </div>
                     <div class="col-4 mb-3">
                         <label class="form-label">Age limit</label>
@@ -47,6 +47,7 @@
                             <option th:each="genre : ${genres}"
                                     th:value="${genre.id}" th:text="${genre.name}"></option>
                         </select>
+                        <span th:if="${#fields.hasErrors('genreId')}" th:errors="*{genreId}" style="color: red;"> </span>
                     </div>
 
                 </div>
@@ -54,6 +55,7 @@
                 <div class="mb-3">
                     <label class="form-label">Film Description</label>
                     <textarea class="form-control" rows="3" th:field="*{description}"></textarea>
+                    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: red;"> </span>
                 </div>
 
 

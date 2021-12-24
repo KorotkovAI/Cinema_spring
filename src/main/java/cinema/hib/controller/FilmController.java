@@ -68,14 +68,13 @@ public class FilmController {
     }
 
     @PostMapping("/add")
-    public String saveNewFilm(@Valid @ModelAttribute("film") FilmDtoShort dto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String saveNewFilm(@Valid @ModelAttribute("film") FilmDtoShort dto, BindingResult bindingResult, Model model) {
         String result = "redirect:/films/all";
 
         if (bindingResult.hasErrors()) {
-            List<ObjectError> errors = bindingResult.getAllErrors();
-            List<String> exceptions = errors.stream().map(ent -> ent.getDefaultMessage()).collect(Collectors.toList());
-            redirectAttributes.addFlashAttribute("exception", exceptions);
-            result = "redirect:/films/add";
+            model.addAttribute("limits", AgeLimit.values());
+            model.addAttribute("genres", genreService.getAll());
+            result = "addFilm";
         } else {
             filmService.saveDtoShortToFilm(dto);
         }

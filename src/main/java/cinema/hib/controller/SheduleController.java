@@ -6,16 +6,17 @@ import cinema.hib.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("shedule")
@@ -43,110 +44,112 @@ public class SheduleController {
         return "sheduleHalls";
     }
 
-    @GetMapping("edit/{id}")
-    public String pickDate(@PathVariable(value = "id") int hallId, Model model) {
+    @GetMapping("edit/{idHall}")
+    public String pickDate(@PathVariable(value = "idHall") int hallId, Model model) {
+
         if (!model.containsAttribute("exception")) {
             model.addAttribute("exception", null);
         }
+
         model.addAttribute("hallName", hallService.getHallById(hallId).getName());
         return "shedulePickDate";
     }
 
-    @PostMapping("edit/{id}")
-    public String confirmDate(@PathVariable(value = "id") int hallId, Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        String result = "redirect:/shedule/edit/slots/" + hallId;
+    @PostMapping("edit/{idHall}")
+    public String confirmDate(@PathVariable(value = "idHall") int hallId, Model model,
+                              @RequestParam("InputDate") String date, RedirectAttributes redirectAttributes) {
+        String result = "redirect:/shedule/slots/" + hallId;
+
+        LocalDate localDate;
 
         try {
-            LocalDate localDate = LocalDate.parse(request.getParameter("InputDate"));
-            if (localDate.isBefore(LocalDate.now())) {
+            localDate = LocalDate.parse(date);
+
+            if (localDate != null && localDate.isBefore(LocalDate.now())) {
                 redirectAttributes.addFlashAttribute("exception", "You can`t edit dates before today");
                 result = "redirect:/shedule/edit/" + hallId;
             } else {
-                model.addAttribute("date", localDate);
+                String dateToPath = null;
+                if (localDate != null) {
+                    dateToPath = localDate.toString();
+                }
+                result = result + "/" + dateToPath;
             }
-        }catch (DateTimeParseException e) {
+        } catch (DateTimeParseException e) {
             redirectAttributes.addFlashAttribute("exception", e.getMessage());
             result = "redirect:/shedule/edit/" + hallId;
         }
+
         return result;
     }
 
-    @GetMapping("edit/slots/{id}")
-    public String sheduleSlots(@PathVariable(value = "id") int hallId, Model model){
-        LocalDate date = null;
-        SheduleDto sheduleDto;
+    @GetMapping("slots/{idHall}/{date}")
+    public String sheduleSlots(@PathVariable(value = "idHall") int hallId, @PathVariable(value = "date") String date,
+                               Model model, RedirectAttributes redirectAttributes) {
+        String result = "slots";
+
+        LocalDate localDate = null;
+
         try {
-            date = (LocalDate) model.getAttribute("date");
-        } catch (Exception e) {
-            model.addAttribute("exception", "Some problems with date");
+            localDate = LocalDate.parse(date);
+        } catch (DateTimeParseException e) {
+            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            result = "redirect:/slots/" + hallId;
         }
 
+        SheduleDto sheduleDto;
         HallDto hallDto = hallService.getHallById(hallId);
+
         try {
             sheduleDto = sheduleService.getSheduleByHall(hallDto);
         } catch (NullPointerException e) {
-         model.addAttribute("exception", "For this date and hall we haven`t shedule");
-         sheduleDto = new SheduleDto();
-         sheduleDto.setHallDto(hallDto);
+            model.addAttribute("exception", "For this date and hall we haven`t shedule");
+            sheduleDto = new SheduleDto();
+            sheduleDto.setHallDto(hallDto);
         }
 
-        List<SlotDto> slotDtos= sheduleService.getSlotsCurrentDate(sheduleDto, date);
+        List<SlotDto> slotDtos = sheduleService.getSlotsCurrentDate(sheduleDto, localDate);
 
         model.addAttribute("hall", hallDto);
         model.addAttribute("slots", slotDtos);
-        model.addAttribute("date", date);
-        return "slots";
+        model.addAttribute("date", localDate);
+        return result;
     }
 
-    @GetMapping("edit/slots/add/{id}")
-    public String addSlot(@PathVariable(value = "id") int hallId, Model model) {
+    @GetMapping("slots/{idHall}/add/{date}")
+    public String addSlot(@PathVariable(value = "idHall") int hallId, @PathVariable(value = "date") String date,
+                          Model model) {
+
         if (!model.containsAttribute("exception")) {
             model.addAttribute("exception", null);
         }
-        model.addAttribute("slot", new SlotDto());
-        model.addAttribute("hall", hallService.getHallById(hallId));
+        model.addAttribute("slot", new SlotDtoShort());
+        model.addAttribute("hallName", hallService.getHallById(hallId).getName());
         model.addAttribute("films", filmService.findAll());
         return "addSlot";
     }
 
-    @PostMapping("edit/slots/add/{id}")
-    public String saveNewFilm(@PathVariable(value = "id") int hallId, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        String result = "redirect:/edit/slots/" + hallId;
+    @PostMapping("slots/{idHall}/add/{date}")
+    public String saveNewFilm(@PathVariable(value = "idHall") int hallId, @PathVariable(value = "date") String date,
+                              @Valid @ModelAttribute("slot") SlotDtoShort dto,
+                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        String result = "slots/" + hallId + "/" + date;
 
-        LocalDate date = LocalDate.parse(request.getParameter("dateOfFilm"));
-        LocalTime startTime = LocalTime.parse(request.getParameter("startTime"));
-        LocalTime endTime = LocalTime.parse(request.getParameter("endTime"));
-        long filmId = Integer.parseInt(request.getParameter("film"));
-
-        SlotDto slotDto = new SlotDto();
-        slotDto.setFilm(filmService.getFilmById(filmId));
-        slotDto.setStartTime(startTime);
-        slotDto.setEndTime(endTime);
-        slotDto.setDateOfFilm(date);
-        System.out.println(slotDto);
-
-        try {
-            System.out.println("111");
-            SlotDto resultSlot = slotService.saveSlot(slotDto);
-            System.out.println("222");
-            System.out.println(resultSlot);
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            List<String> exceptions = errors.stream().map(ent -> ent.getDefaultMessage()).collect(Collectors.toList());
+            System.out.println(exceptions);
+            redirectAttributes.addFlashAttribute("exception", exceptions);
+            result = "redirect:/shedule/slots/" + hallId + "/add/" + date;
+        } else {
+            System.out.println(dto);
+            SlotDto resultSlot = slotService.saveDtoShortToSlot(dto);
             boolean resultUpdating;
             resultUpdating = sheduleService.updateShedule(hallService.getHallById(hallId), resultSlot);
-            System.out.println(resultUpdating);
             if (!resultUpdating) {
                 boolean deleteSlot = slotService.deleteSlot(resultSlot);
-                System.out.println(deleteSlot);
             }
-        } catch (javax.validation.ConstraintViolationException e) {
-            ConstraintViolation<?> problem = e.getConstraintViolations().stream().findFirst().get();
-            String exception = problem.getPropertyPath().toString() + " " + e.getConstraintViolations().stream().findFirst().get().getMessage();
-            redirectAttributes.addFlashAttribute("exception", exception);
-            result = "redirect:/edit/slots/add/" + hallId;
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
-            result = "redirect:/edit/slots/add/" + hallId;
         }
-
         return result;
     }
 

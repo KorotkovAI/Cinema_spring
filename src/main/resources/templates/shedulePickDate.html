@@ -19,7 +19,8 @@
         </div>
         <div class="card-body">
             <div th:if="${exception != null}" style="color: red;" th:text="${exception}"></div>
-            <form name="dateform" method="post">
+
+            <form method="post">
                 <div id="wrapper">
                     <label>Date: </label>
                     <input type="date" name="InputDate"/>

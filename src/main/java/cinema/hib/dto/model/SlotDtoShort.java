@@ -7,28 +7,22 @@ import lombok.ToString;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-public class SlotDto {
+public class SlotDtoShort {
+
+    @NotNull
+    private String dateOfFilm;
+
+    @NotNull
+    private String startTime;
+
+    @NotNull
+    private String endTime;
 
     @Min(0)
-    private long id;
-
-    @NotNull
-    private LocalDate dateOfFilm;
-
-    @NotNull
-    private LocalTime startTime;
-
-    @NotNull
-    private LocalTime endTime;
-
-    @NotNull
-    private FilmDto film;
-
+    private long filmId;
 }

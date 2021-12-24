@@ -16,10 +16,13 @@
     <div class="card text-center border-0">
         <div class="card-header bg-dark row  m-0">
             <div class="col"></div>
-            <div class="display-6 text-white col inline">Slots of <div th:text="${hall.name}"></div> for <div th:datetime="${date}"></div>
+            <div class="display-6 text-white col inline">
+                <div class="col">
+                    Slots of <div th:text="${hall.name}"></div> for <div th:text="${date}"></div>
+                </div>
             </div>
             <div class="col d-flex justify-content-end align-items-center p-0">
-                <a class="btn btn-success" th:href="@{add/{id}(id=${hall.id})}" role="button">ADD SLOT</a>
+                <a class="btn btn-success" th:href="@{add/{date}(date=${date})}" role="button">ADD SLOT</a>
             </div>
 
         </div>
