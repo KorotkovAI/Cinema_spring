@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Service
@@ -36,6 +37,11 @@ public class GenreServiceImpl implements GenreService {
     public Genre readById(int id) {
         return genreRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Genre with id " + id + " not found"));
+    }
+
+    @Override
+    public GenreDto dtoReadById(@Min(0) int id) {
+        return genreMapper.toGenreDto(readById(id));
     }
 
     @Override

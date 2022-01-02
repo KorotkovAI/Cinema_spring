@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
@@ -33,6 +34,7 @@ public class Film {
     private double rate;
 
     @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
     private AgeLimit ageLimit;
 
     @Column(nullable = false)
@@ -40,6 +42,7 @@ public class Film {
     private String description;
 
     @ManyToMany
+    @Column(nullable = false)
     @JoinColumn(name = "genres_name", referencedColumnName = "name")
     private List<Genre> genres;
 

@@ -3,6 +3,7 @@ package cinema.hib.service.impl;
 import cinema.hib.dto.mapper.FilmMapper;
 import cinema.hib.dto.model.FilmDto;
 import cinema.hib.dto.model.FilmDtoShort;
+import cinema.hib.dto.model.FilmDtoToPage;
 import cinema.hib.model.Film;
 import cinema.hib.repository.FilmRepository;
 import cinema.hib.service.FilmService;
@@ -28,13 +29,13 @@ public class FilmServiceImpl implements FilmService {
 
 
     @Override
-    public Page<FilmDto> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+    public Page<FilmDtoToPage> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         Page<Film> films = filmRepository.findAll(pageable);
-        return films.map(ent -> mapper.toFilmDto(ent));
+        return films.map(ent -> mapper.toFilmDtoToPage(ent));
     }
 
     @Override
@@ -47,40 +48,7 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public boolean updateFilmName(FilmDto filmDto) {
-        if (filmDto != null) {
-            Film updatedFilm = filmRepository.save(mapper.toFilm(filmDto));
-            if (updatedFilm.getName().equals(filmDto.getName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean updateFilmDuration(FilmDto filmDto) {
-        if (filmDto != null) {
-            Film updatedFilm = filmRepository.save(mapper.toFilm(filmDto));
-            if (updatedFilm.getDuration() == filmDto.getDuration()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean updateFilmAgeLimit(FilmDto filmDto) {
-        if (filmDto != null) {
-            Film updatedFilm = filmRepository.save(mapper.toFilm(filmDto));
-            if (updatedFilm.getAgeLimit().equals(filmDto.getAgeLimit())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public FilmDto saveDtoShortToFilm(@NotNull FilmDtoShort filmDto) {
+    public FilmDto saveDtoShortToFilm(FilmDtoShort filmDto) {
             Film film = filmRepository.save(mapper.toFilmFromShort(filmDto));
             return mapper.toFilmDto(film);
     }

@@ -10,13 +10,12 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-public class FilmDto {
+public class FilmDtoToPage {
 
     @Min(0)
     private long id;
@@ -28,18 +27,10 @@ public class FilmDto {
     @Min(1)
     private int duration;
 
-
-    private double rate;
-
     @NotNull
     private AgeLimit ageLimit;
 
-    @Size(min = 10, max = 100)
-    private String description;
-
-
-    private List<GenreDto> genres;
-
-    private List<SlotDto> slots;
+    @NotNull
+    private String genreNames;
 
 }

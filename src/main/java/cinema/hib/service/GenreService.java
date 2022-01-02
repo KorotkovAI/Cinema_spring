@@ -4,6 +4,7 @@ import cinema.hib.dto.model.GenreDto;
 import cinema.hib.model.Film;
 import cinema.hib.model.Genre;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 public interface GenreService {
@@ -18,4 +19,6 @@ public interface GenreService {
     List<GenreDto> getAll();
 
     List<Film> getAllFilms(Genre genre);
+
+    GenreDto dtoReadById(int id);
 }

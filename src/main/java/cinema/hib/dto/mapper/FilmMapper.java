@@ -2,8 +2,8 @@ package cinema.hib.dto.mapper;
 
 import cinema.hib.dto.model.FilmDto;
 import cinema.hib.dto.model.FilmDtoShort;
+import cinema.hib.dto.model.FilmDtoToPage;
 import cinema.hib.model.Film;
-import cinema.hib.model.Genre;
 import cinema.hib.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,8 +22,8 @@ public class FilmMapper {
     @Autowired
     GenreRepository genreRepository;
 
-    public List<FilmDto> toFilmDtoList(@NotNull List<Film> films){
-        return films.stream().map(ent->toFilmDto(ent)).collect(Collectors.toList());
+    public List<FilmDto> toFilmDtoList(@NotNull List<Film> films) {
+        return films.stream().map(ent -> toFilmDto(ent)).collect(Collectors.toList());
     }
 
     public FilmDto toFilmDto(Film film) {
@@ -52,18 +52,37 @@ public class FilmMapper {
         return result;
     }
 
-    public Film toFilmFromShort (FilmDtoShort filmDtoShort) {
+    public Film toFilmFromShort(FilmDtoShort filmDtoShort) {
         if (filmDtoShort != null) {
             Film result = new Film();
             result.setName(filmDtoShort.getName());
             result.setDuration(filmDtoShort.getDuration());
-            List<Genre> genres = new ArrayList<>();
-            Genre genre = genreRepository.getById(filmDtoShort.getGenreId());
-            genres.add(genre);
-            result.setGenres(genres);
             result.setAgeLimit(filmDtoShort.getAgeLimit());
             result.setDescription(filmDtoShort.getDescription());
+            result.setGenres(new ArrayList<>());
             return result;
+        }
+        return null;
+    }
+
+    public FilmDtoToPage toFilmDtoToPage(Film film) {
+        if (film != null) {
+            FilmDtoToPage filmDtoToPage = new FilmDtoToPage();
+            filmDtoToPage.setId(film.getId());
+            filmDtoToPage.setName(film.getName());
+            filmDtoToPage.setAgeLimit(film.getAgeLimit());
+            filmDtoToPage.setDuration(film.getDuration());
+            String result = new String();
+
+            if (film.getGenres() != null) {
+                String genreNames = film.getGenres().stream().map(ent -> ent.getName()).collect(Collectors.toList()).toString();
+                if (genreNames.length() > 2) {
+                    result = genreNames.substring(1, genreNames.length() - 2);
+                }
+            }
+
+            filmDtoToPage.setGenreNames(result);
+            return filmDtoToPage;
         }
         return null;
     }

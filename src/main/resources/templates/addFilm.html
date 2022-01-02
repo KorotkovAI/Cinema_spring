@@ -28,34 +28,26 @@
                 <div class="row">
 
 
-                    <div class="col-4  mb-3">
+                    <div class="col-6  mb-3">
                         <label class="form-label">Duration </label>
                         <input type="number" th:field="*{duration}" class="form-control" placeholder="in seconds">
-                        <span th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}" style="color: red;"> </span>
+                        <span th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"
+                              style="color: red;"> </span>
                     </div>
-                    <div class="col-4 mb-3">
+                    <div class="col-6 mb-3">
                         <label class="form-label">Age limit</label>
                         <select class="form-select" th:field="*{ageLimit}" aria-label="Default select example">
                             <option th:each="ageLimit : ${limits}"
                                     th:value="${ageLimit}" th:text="${ageLimit}"></option>
                         </select>
                     </div>
-
-                    <div class="col-4 mb-3">
-                        <label class="form-label">Genre</label>
-                        <select class="form-select" th:field="*{genreId}" aria-label="Default select example">
-                            <option th:each="genre : ${genres}"
-                                    th:value="${genre.id}" th:text="${genre.name}"></option>
-                        </select>
-                        <span th:if="${#fields.hasErrors('genreId')}" th:errors="*{genreId}" style="color: red;"> </span>
-                    </div>
-
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Film Description</label>
                     <textarea class="form-control" rows="3" th:field="*{description}"></textarea>
-                    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: red;"> </span>
+                    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
+                          style="color: red;"> </span>
                 </div>
 
 
