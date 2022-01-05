@@ -11,4 +11,6 @@ public interface SheduleRepository extends JpaRepository<Shedule, Long> {
 
     Shedule getSheduleBySlotsContains (Slot slot);
 
+    Shedule getAllByHall (Hall hall);
+
 }

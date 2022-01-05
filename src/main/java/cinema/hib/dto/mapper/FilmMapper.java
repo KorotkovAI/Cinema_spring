@@ -27,7 +27,7 @@ public class FilmMapper {
     }
 
     public FilmDto toFilmDto(Film film) {
-        //Here must add slots
+
         FilmDto result = new FilmDto();
         result.setId(film.getId());
         result.setDescription(film.getDescription());
@@ -35,7 +35,9 @@ public class FilmMapper {
         result.setName(film.getName());
         result.setRate(film.getRate());
         result.setDuration(film.getDuration());
-        result.setGenres(genreMapper.toGenreDtoList(film.getGenres()));
+        if (film.getGenres() != null) {
+            result.setGenres(genreMapper.toGenreDtoList(film.getGenres()));
+        }
         return result;
     }
 
@@ -48,7 +50,9 @@ public class FilmMapper {
         result.setDuration((filmDto.getDuration()));
         result.setName(filmDto.getName());
         result.setRate(filmDto.getRate());
-        result.setGenres(genreMapper.toGenreList(filmDto.getGenres()));
+        if (filmDto.getGenres() != null) {
+            result.setGenres(genreMapper.toGenreList(filmDto.getGenres()));
+        }
         return result;
     }
 

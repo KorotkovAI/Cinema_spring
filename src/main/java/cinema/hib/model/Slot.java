@@ -31,6 +31,10 @@ public class Slot {
     @JoinColumn(name = "films_name", referencedColumnName = "name")
     private Film film;
 
+    @ManyToOne
+    @JoinColumn(name = "shedule_id", referencedColumnName = "id")
+    private Shedule shedule;
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;

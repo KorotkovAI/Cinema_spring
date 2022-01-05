@@ -87,7 +87,7 @@ public class SheduleController {
     public String sheduleSlots(@PathVariable(value = "idHall") int hallId, @PathVariable(value = "date") String date,
                                Model model, RedirectAttributes redirectAttributes) {
         String result = "slots";
-
+        System.out.println("----------------");
         LocalDate localDate = null;
 
         try {
@@ -99,17 +99,19 @@ public class SheduleController {
 
         SheduleDto sheduleDto;
         HallDto hallDto = hallService.getHallById(hallId);
-
+        System.out.println("halldto!!! " + hallDto);
         try {
             sheduleDto = sheduleService.getSheduleByHall(hallDto);
+            System.out.println("sheduledto!!! " + sheduleDto);
         } catch (NullPointerException e) {
+            System.out.println("1111111111");
             model.addAttribute("exception", "For this date and hall we haven`t shedule");
             sheduleDto = new SheduleDto();
             sheduleDto.setHallDto(hallDto);
         }
 
         List<SlotDto> slotDtos = sheduleService.getSlotsCurrentDate(sheduleDto, localDate);
-
+        System.out.println("list of slots dtos" + slotDtos);
         model.addAttribute("hall", hallDto);
         model.addAttribute("slots", slotDtos);
         model.addAttribute("date", localDate);
@@ -123,9 +125,11 @@ public class SheduleController {
         if (!model.containsAttribute("exception")) {
             model.addAttribute("exception", null);
         }
+
         model.addAttribute("slot", new SlotDtoShort());
         model.addAttribute("hallName", hallService.getHallById(hallId).getName());
         model.addAttribute("films", filmService.findAll());
+
         return "addSlot";
     }
 
@@ -133,23 +137,40 @@ public class SheduleController {
     public String saveNewFilm(@PathVariable(value = "idHall") int hallId, @PathVariable(value = "date") String date,
                               @Valid @ModelAttribute("slot") SlotDtoShort dto,
                               BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        String result = "slots/" + hallId + "/" + date;
+        String result;
+        try {
+            LocalDate localDate = LocalDate.parse(dto.getDateOfFilm());
 
-        if (bindingResult.hasErrors()) {
-            List<ObjectError> errors = bindingResult.getAllErrors();
-            List<String> exceptions = errors.stream().map(ent -> ent.getDefaultMessage()).collect(Collectors.toList());
-            System.out.println(exceptions);
-            redirectAttributes.addFlashAttribute("exception", exceptions);
-            result = "redirect:/shedule/slots/" + hallId + "/add/" + date;
-        } else {
-            System.out.println(dto);
-            SlotDto resultSlot = slotService.saveDtoShortToSlot(dto);
-            boolean resultUpdating;
-            resultUpdating = sheduleService.updateShedule(hallService.getHallById(hallId), resultSlot);
-            if (!resultUpdating) {
-                boolean deleteSlot = slotService.deleteSlot(resultSlot);
+            if (localDate != null && localDate.isBefore(LocalDate.now())) {
+                redirectAttributes.addFlashAttribute("exception", "You can`t add film to this day");
+                result = "redirect:/shedule/slots/" + hallId + "/add/" + dto.getDateOfFilm();
+            } else {
+                try {
+                    SlotDto resultSlot = slotService.saveDtoShortToSlot(dto);
+                    boolean resultUpdating;
+                    resultUpdating = sheduleService.updateShedule(hallService.getHallById(hallId), resultSlot);
+                    System.out.println("sheduleservice after update " + sheduleService.getSheduleByHall(hallService.getHallById(hallId)));
+                    System.out.println("resultUpdating " + resultUpdating);
+                    if (!resultUpdating) {
+                        slotService.deleteSlot(resultSlot);
+                        redirectAttributes.addFlashAttribute("exception", "Can`t save this slot? because " +
+                                "in shedule have one with such parametrs");
+                        result = "redirect:/shedule/slots/" + hallId + "/add/" + dto.getDateOfFilm();
+                    } else {
+                        result = "redirect:/shedule/slots/" + hallId + "/" + dto.getDateOfFilm();
+                    }
+                } catch (NumberFormatException e) {
+                    redirectAttributes.addFlashAttribute("exception", e.getMessage());
+                    result = "redirect:/shedule/slots/" + hallId + "/add/" + dto.getDateOfFilm();
+                }
+
             }
+        } catch (DateTimeParseException e) {
+            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            result = "redirect:/shedule/slots/" + hallId + "/add/" + dto.getDateOfFilm();
         }
+
+
         return result;
     }
 

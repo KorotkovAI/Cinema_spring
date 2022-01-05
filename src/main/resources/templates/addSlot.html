@@ -21,8 +21,8 @@
             </h5>
         </div>
         <div class="card-body">
-            <div th:if="${exception != null}" style="color: red;" th:text="${exception}"></div>
             <form th:object="${slot}" method="post">
+                <div th:if="${exception != null}" style="color: red;" th:text="${exception}"></div>
                 <div class="mb-3">
                     <label class="form-label">Film</label>
                     <select class="form-select" th:field="*{filmId}" aria-label="Default select example">
@@ -34,15 +34,17 @@
                     <div class="col-4  mb-3">
                         <label class="form-label">Date </label>
                         <input type="date" th:field="*{dateOfFilm}" class="form-control" placeholder="date of film">
+                        <span th:if="${#fields.hasErrors('dateOfFilm')}" th:errors="*{dateOfFilm}" style="color: red;"> </span>
                     </div>
                     <div class="col-4  mb-3">
                         <label class="form-label">Start time </label>
-                        <input type="time" th:field="*{startTime}" class="form-control"
-                               placeholder="start time of Slot">
+                        <input type="time" th:field="*{startTime}" class="form-control" placeholder="start time of Slot">
+                        <span th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}" style="color: red;"> </span>
                     </div>
                     <div class="col-4  mb-3">
                         <label class="form-label">End time </label>
                         <input type="time" th:field="*{endTime}" class="form-control" placeholder="end time of Slot">
+                        <span th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}" style="color: red;"> </span>
                     </div>
                 </div>
                 <div class="card-footer text-muted">

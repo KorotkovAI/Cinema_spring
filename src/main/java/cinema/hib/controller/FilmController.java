@@ -102,7 +102,7 @@ public class FilmController {
         } else {
             redirectAttributes.addFlashAttribute("exception",
                     "You can`t save film without genres");
-            result = "redirect:/films/editGenres/" + filmDto.getId();
+            result = "redirect:/films/edit/editGenres/" + filmDto.getId();
         }
         return result;
     }

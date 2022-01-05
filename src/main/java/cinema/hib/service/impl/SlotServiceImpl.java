@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 
 @Service
@@ -20,6 +22,9 @@ public class SlotServiceImpl implements SlotService {
 
     @Autowired
     private SlotRepository slotRepository;
+
+    @Autowired
+    private FilmServiceImpl filmService;
 
     @Resource
     private SlotMapper slotMapper;
@@ -44,7 +49,7 @@ public class SlotServiceImpl implements SlotService {
     }
 
     @Override
-    public boolean deleteSlot(@NotNull SlotDto slotDto){
+    public boolean deleteSlot(@NotNull SlotDto slotDto) {
         if (slotRepository.findAll().contains(slotMapper.toSlot(slotDto))) {
             slotRepository.delete(slotMapper.toSlot(slotDto));
             return true;
@@ -62,17 +67,26 @@ public class SlotServiceImpl implements SlotService {
     }
 
     @Override
-    public SlotDto saveDtoShortToSlot(@NotNull SlotDtoShort slotDtoShort) {
-        /*
-        long time = Duration.between(slotDtoShort.getStartTime(), slotDtoShort.getEndTime()).getSeconds();
-        System.out.println(time);
-        if (time > slotDtoShort.getFilm().getDuration()) {
-            Slot slot = slotRepository.save(slotMapper.toSlotFromShort(slotDtoShort));
-            System.out.println(slot);
-            return slotMapper.toSlotDto(slot);
-        }
+    public SlotDto saveDtoShortToSlot(@NotNull SlotDtoShort slotDtoShort) throws NumberFormatException {
 
-         */
-        return null;
+        try {
+            LocalTime startTime = LocalTime.parse(slotDtoShort.getStartTime());
+            LocalTime endTime = LocalTime.parse(slotDtoShort.getEndTime());
+
+            if (endTime.isBefore(startTime)) {
+                throw new NumberFormatException("end of slot time can`t be less then start time");
+            }
+
+            long time = Duration.between(startTime, endTime).getSeconds();
+
+            if (time > filmService.getFilmById(slotDtoShort.getFilmId()).getDuration()) {
+                Slot slot = slotRepository.save(slotMapper.toSlotFromShort(slotDtoShort));
+                return slotMapper.toSlotDto(slot);
+            } else {
+                throw new NumberFormatException("slot time can`t be less then film duration");
+            }
+        } catch (DateTimeParseException e) {
+            throw new NumberFormatException("can`t parse current time");
+        }
     }
 }

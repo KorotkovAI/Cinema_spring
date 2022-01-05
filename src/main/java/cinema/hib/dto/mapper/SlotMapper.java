@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,12 +21,18 @@ public class SlotMapper {
     @Autowired
     FilmRepository filmRepository;
 
-    public List<SlotDto> toSlotDtoList(List<Slot> slots){
-        return slots.stream().map(this::toSlotDto).collect(Collectors.toList());
+    public List<SlotDto> toSlotDtoList(List<Slot> slots) {
+        if (slots != null) {
+            return slots.stream().map(this::toSlotDto).collect(Collectors.toList());
+        }
+        return null;
     }
 
     public List<Slot> toSlotList(List<SlotDto> slotDtoList) {
-        return slotDtoList.stream().map(this::toSlot).collect(Collectors.toList());
+        if (slotDtoList != null) {
+            return slotDtoList.stream().map(this::toSlot).collect(Collectors.toList());
+        }
+        return null;
     }
 
     public SlotDto toSlotDto(Slot slot) {
@@ -50,13 +55,16 @@ public class SlotMapper {
         return result;
     }
 
-    public Slot toSlotFromShort(SlotDtoShort slotDto) throws DateTimeParseException {
+    public Slot toSlotFromShort(SlotDtoShort slotDto) {
 
-        Slot result = new Slot();
+        if (slotDto != null) {
+            Slot result = new Slot();
             result.setDateOfFilm(LocalDate.parse(slotDto.getDateOfFilm()));
             result.setEndTime(LocalTime.parse(slotDto.getEndTime()));
             result.setStartTime(LocalTime.parse(slotDto.getStartTime()));
             result.setFilm(filmRepository.getById(slotDto.getFilmId()));
-        return result;
+            return result;
+        }
+        return null;
     }
 }

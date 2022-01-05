@@ -38,24 +38,30 @@ public class SheduleServiceImpl implements SheduleService {
 
     @Override
     public SheduleDto getSheduleByHall(HallDto hallDto) {
-        SheduleDto result = null;
-
+        System.out.println("sheduleRepository.findAll()" + sheduleRepository.findAll());
         if (hallDto != null) {
-        Shedule shedule = sheduleRepository.getShedulesByHall(hallMapper.toHall(hallDto));
-        result = sheduleMapper.toSheduleDto(shedule);
+            System.out.println("get into method");
+            System.out.println(hallMapper.toHall(hallDto));
+            Shedule shedule = sheduleRepository.getAllByHall(hallMapper.toHall(hallDto));
+            System.out.println("result by getting shedule" + shedule);
+            System.out.println("sheduleRepository.getAllByHall()!!!!! " + sheduleRepository.getAllByHall(hallMapper.toHall(hallDto)).getSlots());
+            return sheduleMapper.toSheduleDto(shedule);
         }
-        return result;
+        return null;
     }
 
     @Override
     public List<SlotDto> getSlotsCurrentDate(SheduleDto sheduleDto, LocalDate date) {
         List<SlotDto> slotDtos;
+        System.out.println("sheduleDto.getSlotDtos()" + sheduleDto.getSlotDtos());
+        System.out.println("sheduleRepository.findAll()" + sheduleRepository.findAll());
         if (sheduleDto.getSlotDtos() != null) {
+            System.out.println("before stream" + sheduleDto.getSlotDtos());
             slotDtos = sheduleDto.getSlotDtos().stream().filter(ent -> ent.getDateOfFilm().equals(date)).collect(Collectors.toList());
         } else {
             slotDtos = new ArrayList<>();
         }
-
+        System.out.println("filter by day" + slotDtos);
         LocalTime localTime = LocalTime.now();
         List<SlotDto> result;
 
@@ -64,7 +70,8 @@ public class SheduleServiceImpl implements SheduleService {
         } else {
             result = new ArrayList<>();
         }
-        return  result;
+        System.out.println("filter by start time" + result);
+        return result;
     }
 
     @Override
@@ -73,11 +80,20 @@ public class SheduleServiceImpl implements SheduleService {
             Hall hall = hallMapper.toHall(hallDto);
             Slot slot = slotMapper.toSlot(slotDto);
             Shedule shedulesByHall = sheduleRepository.getShedulesByHall(hall);
-
-            List<Slot> slotsCurrentDay = shedulesByHall.getSlots().stream().
-                    filter(ent -> ent.getDateOfFilm().equals(slot.getDateOfFilm())).collect(Collectors.toList());
-            slotsCurrentDay.forEach(System.out::println);
+            System.out.println("shedules by hall" + shedulesByHall);
+            if (shedulesByHall == null) {
+                shedulesByHall = new Shedule();
+                shedulesByHall.setHall(hallMapper.toHall(hallDto));
+            }
+            System.out.println("shedulesByHall.getSlots()" + shedulesByHall.getSlots());
+            if (shedulesByHall.getSlots() == null) {
+                shedulesByHall.setSlots(new ArrayList<>());
+            }
+            System.out.println("shedulesByHall.getSlots()" + shedulesByHall.getSlots());
             shedulesByHall.getSlots().add(slot);
+            System.out.println("shedule by hall updated" + shedulesByHall);
+            sheduleRepository.save(shedulesByHall);
+            System.out.println("shedule repository" + sheduleRepository.findAll());
             return true;
         }
         return false;

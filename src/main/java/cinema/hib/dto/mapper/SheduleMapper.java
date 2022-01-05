@@ -15,11 +15,15 @@ public class SheduleMapper {
     SlotMapper slotMapper;
 
     public SheduleDto toSheduleDto(Shedule shedule) {
-        SheduleDto result = new SheduleDto();
-        result.setId(shedule.getId());
-        result.setHallDto(hallMapper.toHallDto(shedule.getHall()));
-        result.setSlotDtos(slotMapper.toSlotDtoList(shedule.getSlots()));
-        return result;
+        if (shedule != null) {
+            SheduleDto result = new SheduleDto();
+            result.setId(shedule.getId());
+            result.setHallDto(hallMapper.toHallDto(shedule.getHall()));
+            result.setSlotDtos(slotMapper.toSlotDtoList(shedule.getSlots()));
+            System.out.println("Result creating sheduleDto in mapper" + result);
+            return result;
+        }
+        return null;
     }
 
     public Shedule toShedule(SheduleDto sheduleDto) {

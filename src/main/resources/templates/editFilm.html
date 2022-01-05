@@ -55,7 +55,7 @@
 
                 <div class="mb-3">
                     <label class="genres">Genres</label>
-                    <div type="text" th:readonly="${filmGenres}"></div>
+                    <div type="text" th:readonly="${filmGenres.toArray()}"></div>
                     <a class="btn btn-success" th:href="@{editGenres/{id}(id=${film.id})}" role="button">Edit Genres</a>
                 </div>
 
