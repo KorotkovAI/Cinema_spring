@@ -19,4 +19,6 @@ public interface FilmService {
     FilmDto saveDtoToFilm (FilmDto filmDto);
 
     List<FilmDto> findAll();
+
+    boolean deleteFilm(FilmDto filmDto);
 }

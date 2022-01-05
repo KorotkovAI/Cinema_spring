@@ -17,6 +17,7 @@
         <div class="card-header bg-dark row  m-0">
             <div class="col"></div>
             <div class="display-6 text-white col inline">
+
                 <div class="col">
                     Slots of <div th:text="${hall.name}"></div> for <div th:text="${date}"></div>
                 </div>
@@ -24,7 +25,6 @@
             <div class="col d-flex justify-content-end align-items-center p-0">
                 <a class="btn btn-success" th:href="@{add/{date}(date=${date})}" role="button">ADD SLOT</a>
             </div>
-
         </div>
         <div class="card-body">
             <table class="table">
@@ -44,13 +44,15 @@
                     <td th:text="${slot.endTime}"></td>
                     <td th:text="${slot.film.name}"></td>
                     <td>
-                        <a class="btn btn-primary" th:href="@{slot/edit/{id}(id=${slot.id})}" role="button">Edit Slot</a>
+                        <a class="btn btn-primary" th:href="@{slot/edit/{id}(id=${slot.id})}" role="button">Edit
+                            Slot</a>
                     </td>
                     <td>
                         <a class="btn btn-primary" th:href="@{slot/delete/{id}(id=${slot.id})}" role="button">Delete</a>
                     </td>
                     <td>
-                        <a class="btn btn-primary" th:href="@{slot/editPrice/{id}(id=${slot.id})}" role="button">Edit price</a>
+                        <a class="btn btn-primary" th:href="@{slot/editPrice/{id}(id=${slot.id})}" role="button">Edit
+                            price</a>
                     </td>
                 </tr>
                 </tbody>

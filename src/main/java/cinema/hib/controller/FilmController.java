@@ -32,6 +32,10 @@ public class FilmController {
 
     @GetMapping("/all")
     public String films(Model model) {
+        if (!model.containsAttribute("exception")) {
+            model.addAttribute("exception", null);
+        }
+
         return findPaginated(1, "id", "asc", model);
     }
 
@@ -190,6 +194,19 @@ public class FilmController {
         }
 
         return result;
+    }
+
+    @GetMapping("filmDelete/{id}")
+    public String deleteFilm(@PathVariable(value = "id") long filmId, RedirectAttributes redirectAttributes) {
+        FilmDto filmDto = filmService.getFilmById(filmId);
+
+        boolean result = filmService.deleteFilm(filmDto);
+
+        if (result) {
+            redirectAttributes.addFlashAttribute("exception",
+                    "You can`t delete film with such id");
+        }
+        return "redirect:/films/all/";
     }
 
 }

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -49,8 +50,8 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public FilmDto saveDtoShortToFilm(FilmDtoShort filmDto) {
-            Film film = filmRepository.save(mapper.toFilmFromShort(filmDto));
-            return mapper.toFilmDto(film);
+        Film film = filmRepository.save(mapper.toFilmFromShort(filmDto));
+        return mapper.toFilmDto(film);
     }
 
     @Override
@@ -63,5 +64,18 @@ public class FilmServiceImpl implements FilmService {
     public List<FilmDto> findAll() {
         List<Film> films = filmRepository.findAll();
         return mapper.toFilmDtoList(films);
+    }
+
+    @Override
+    public boolean deleteFilm(FilmDto filmDto) {
+        if (filmDto != null) {
+            filmRepository.delete(mapper.toFilm(filmDto));
+            try {
+                filmRepository.getById(filmDto.getId());
+            } catch (EntityNotFoundException e) {
+                return true;
+            }
+        }
+        return false;
     }
 }

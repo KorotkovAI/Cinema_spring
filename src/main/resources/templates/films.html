@@ -24,6 +24,7 @@
         </div>
         <div class="card-body">
             <table class="table">
+                <div th:if="${exception != null}" style="color: red;" th:text="${exception}"></div>
                 <thead>
                 <tr>
                     <th scope="col">
