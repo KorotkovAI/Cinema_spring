@@ -21,4 +21,6 @@ public interface FilmService {
     List<FilmDto> findAll();
 
     boolean deleteFilm(FilmDto filmDto);
+
+    FilmDto getFilmByName(String filmName);
 }

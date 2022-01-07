@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -17,33 +16,31 @@ public class Shedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne
-    @JoinColumn(name = "hall_id", referencedColumnName = "id")
-    private Hall hall;
+    @JoinColumn(name = "halls_name", referencedColumnName = "name", nullable = false)
+    private String hallName;
 
-    @OneToMany
-    @JoinColumn(name = "slot_id", referencedColumnName = "id")
-    private List<Slot> slots;
+    @JoinColumn(name = "slot_id", referencedColumnName = "id", nullable = false)
+    private long slotId;
 
     @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
-        Shedule shedule = (Shedule) object;
-        return hall.equals(shedule.hall) && slots.equals(shedule.slots);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Shedule shedule = (Shedule) o;
+        return slotId == shedule.slotId && hallName.equals(shedule.hallName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), hall, slots);
+        return Objects.hash(hallName, slotId);
     }
 
     @Override
-    public java.lang.String toString() {
+    public String toString() {
         return "Shedule{" +
                 "id=" + id +
-                ", hall=" + hall +
+                ", hallName='" + hallName + '\'' +
+                ", slotId=" + slotId +
                 '}';
     }
 }

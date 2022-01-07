@@ -9,11 +9,10 @@ import java.util.List;
 
 public interface SheduleService {
 
-    SheduleDto getSheduleByHall(HallDto hallDto);
+    SheduleDto getSheduleByHallName(String hallName);
 
-    List<SlotDto> getSlotsCurrentDate(SheduleDto sheduleDto, LocalDate date);
+    List<SlotDto> getSlotsCurrentDate(HallDto hallDto, LocalDate date);
 
-    boolean updateShedule(HallDto hallDto, SlotDto slotDto);
+    boolean updateShedule(String hallName, long slotId);
 
-    SheduleDto getSheduleBySlot(SlotDto slotDto);
 }

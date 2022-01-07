@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="col d-flex justify-content-end align-items-center p-0">
-                <a class="btn btn-success" th:href="@{add/{date}(date=${date})}" role="button">ADD SLOT</a>
+                <a class="btn btn-success" th:href="@{add}" role="button">ADD SLOT</a>
             </div>
         </div>
         <div class="card-body">
@@ -42,9 +42,9 @@
                     <td th:text="${slot.id}"></td>
                     <td th:text="${slot.startTime}"></td>
                     <td th:text="${slot.endTime}"></td>
-                    <td th:text="${slot.film.name}"></td>
+                    <td th:text="${slot.filmName}"></td>
                     <td>
-                        <a class="btn btn-primary" th:href="@{slot/edit/{id}(id=${slot.id})}" role="button">Edit
+                        <a class="btn btn-primary" th:href="@{slot/edit/{id}/{date}(id=${slot.id}, date=${date})}" role="button">Edit
                             Slot</a>
                     </td>
                     <td>

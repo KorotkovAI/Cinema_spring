@@ -6,7 +6,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
@@ -23,7 +22,7 @@ public class Film {
 
     @NotBlank(message = "The film Name cannot be empty")
     @Column(nullable = false, unique = true)
-    @Size(min = 3, max = 100)
+    @Size(min = 3, max = 50)
     private String name;
 
     @Min(1)
@@ -42,12 +41,10 @@ public class Film {
     private String description;
 
     @ManyToMany
-    @Column(nullable = false)
     @JoinColumn(name = "genres_name", referencedColumnName = "name")
     private List<Genre> genres;
 
     @OneToMany
-    @JoinColumn(name = "slot_id", referencedColumnName = "id")
     private List<Slot> slots;
 
     @Override

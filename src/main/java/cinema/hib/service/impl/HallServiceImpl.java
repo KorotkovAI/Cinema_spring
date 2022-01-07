@@ -27,7 +27,18 @@ public class HallServiceImpl implements HallService {
 
     @Override
     public HallDto getHallById(int id) {
-        Hall currenthall = hallRepository.getById(id);
-        return hallMapper.toHallDto(currenthall);
+        if (id > 0) {
+            Hall currenthall = hallRepository.getById(id);
+            return hallMapper.toHallDto(currenthall);
+        }
+        return null;
+    }
+
+    @Override
+    public Hall getHallByName(String hallName) {
+        if (hallName != null) {
+            return hallRepository.getByName(hallName);
+        }
+        return null;
     }
 }

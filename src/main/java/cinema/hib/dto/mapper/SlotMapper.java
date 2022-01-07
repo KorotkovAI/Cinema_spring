@@ -41,7 +41,7 @@ public class SlotMapper {
         result.setDateOfFilm(slot.getDateOfFilm());
         result.setEndTime(slot.getEndTime());
         result.setStartTime(slot.getStartTime());
-        result.setFilm(filmMapper.toFilmDto(slot.getFilm()));
+        result.setFilmName(slot.getFilmName());
         return result;
     }
 
@@ -51,18 +51,17 @@ public class SlotMapper {
         result.setDateOfFilm(slotDto.getDateOfFilm());
         result.setEndTime(slotDto.getEndTime());
         result.setStartTime(slotDto.getStartTime());
-        result.setFilm(filmMapper.toFilm(slotDto.getFilm()));
+        result.setFilmName(slotDto.getFilmName());
         return result;
     }
 
     public Slot toSlotFromShort(SlotDtoShort slotDto) {
-
         if (slotDto != null) {
             Slot result = new Slot();
             result.setDateOfFilm(LocalDate.parse(slotDto.getDateOfFilm()));
             result.setEndTime(LocalTime.parse(slotDto.getEndTime()));
             result.setStartTime(LocalTime.parse(slotDto.getStartTime()));
-            result.setFilm(filmRepository.getById(slotDto.getFilmId()));
+            result.setFilmName(slotDto.getFilmName());
             return result;
         }
         return null;

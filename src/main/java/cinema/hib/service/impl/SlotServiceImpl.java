@@ -3,7 +3,6 @@ package cinema.hib.service.impl;
 import cinema.hib.dto.mapper.SlotMapper;
 import cinema.hib.dto.model.SlotDto;
 import cinema.hib.dto.model.SlotDtoShort;
-import cinema.hib.model.Film;
 import cinema.hib.model.Slot;
 import cinema.hib.repository.SlotRepository;
 import cinema.hib.service.SlotService;
@@ -33,15 +32,13 @@ public class SlotServiceImpl implements SlotService {
     public SlotDto saveSlot(SlotDto slotDto) {
         if (slotDto != null) {
             long time = ChronoUnit.SECONDS.between(slotDto.getStartTime(), slotDto.getEndTime());
-            if (time > slotDto.getFilm().getDuration()) {
+            if (time > filmService.getFilmByName(slotDto.getFilmName()).getDuration()) {
                 Slot before = new Slot();
-                before.setFilm(slotMapper.toSlot(slotDto).getFilm());
+                before.setFilmName(slotDto.getFilmName());
                 before.setEndTime(slotDto.getEndTime());
                 before.setStartTime(slotDto.getStartTime());
                 before.setDateOfFilm(slotDto.getDateOfFilm());
                 Slot slot = slotRepository.save(before);
-                slotRepository.findAll().stream().forEach(System.out::println);
-                Film film = slot.getFilm();
                 return slotMapper.toSlotDto(slot);
             }
         }
@@ -79,7 +76,7 @@ public class SlotServiceImpl implements SlotService {
 
             long time = Duration.between(startTime, endTime).getSeconds();
 
-            if (time > filmService.getFilmById(slotDtoShort.getFilmId()).getDuration()) {
+            if (time > filmService.getFilmByName(slotDtoShort.getFilmName()).getDuration()) {
                 Slot slot = slotRepository.save(slotMapper.toSlotFromShort(slotDtoShort));
                 return slotMapper.toSlotDto(slot);
             } else {

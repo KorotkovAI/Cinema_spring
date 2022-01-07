@@ -1,9 +1,7 @@
 package cinema.hib.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,8 +11,6 @@ import java.util.Objects;
 @Table(name = "tickets")
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
 public class Ticket {
 
     @Id

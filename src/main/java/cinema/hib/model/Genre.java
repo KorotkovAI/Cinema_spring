@@ -25,6 +25,7 @@ public class Genre {
     private String name;
 
     @ManyToMany
+    @JoinColumn(name = "films_name", referencedColumnName = "name")
     private List<Film> films;
 
     @Override

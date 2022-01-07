@@ -46,7 +46,6 @@ public class FilmController {
 
         Page<FilmDtoToPage> page = filmService.findPaginated(pageNo, pageSize, sortField, sortDir);
 
-
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());

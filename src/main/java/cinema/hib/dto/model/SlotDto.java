@@ -29,6 +29,6 @@ public class SlotDto {
     private LocalTime endTime;
 
     @NotNull
-    private FilmDto film;
+    private String filmName;
 
 }

@@ -1,22 +1,18 @@
 package cinema.hib.controller;
 
 import cinema.hib.dto.model.*;
-import cinema.hib.model.SeatType;
 import cinema.hib.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("shedule")
@@ -56,28 +52,20 @@ public class SheduleController {
     }
 
     @PostMapping("edit/{idHall}")
-    public String confirmDate(@PathVariable(value = "idHall") int hallId, Model model,
+    public String confirmDate(@PathVariable(value = "idHall") int hallId,
                               @RequestParam("InputDate") String date, RedirectAttributes redirectAttributes) {
-        String result = "redirect:/shedule/slots/" + hallId;
-
-        LocalDate localDate;
+        String result = "redirect:/shedule/edit/" + hallId;
 
         try {
-            localDate = LocalDate.parse(date);
+            LocalDate currentDate = LocalDate.parse(date);
 
-            if (localDate != null && localDate.isBefore(LocalDate.now())) {
+            if (currentDate.isBefore(LocalDate.now())) {
                 redirectAttributes.addFlashAttribute("exception", "You can`t edit dates before today");
-                result = "redirect:/shedule/edit/" + hallId;
             } else {
-                String dateToPath = null;
-                if (localDate != null) {
-                    dateToPath = localDate.toString();
-                }
-                result = result + "/" + dateToPath;
+                result = "redirect:/shedule/slots/" + hallId + "/" + currentDate;
             }
         } catch (DateTimeParseException e) {
             redirectAttributes.addFlashAttribute("exception", e.getMessage());
-            result = "redirect:/shedule/edit/" + hallId;
         }
 
         return result;
@@ -87,39 +75,26 @@ public class SheduleController {
     public String sheduleSlots(@PathVariable(value = "idHall") int hallId, @PathVariable(value = "date") String date,
                                Model model, RedirectAttributes redirectAttributes) {
         String result = "slots";
-        System.out.println("----------------");
-        LocalDate localDate = null;
 
         try {
-            localDate = LocalDate.parse(date);
+            LocalDate localDate = LocalDate.parse(date);
+
+            HallDto hallDto = hallService.getHallById(hallId);
+
+            List<SlotDto> slotDtos = sheduleService.getSlotsCurrentDate(hallDto, localDate);
+
+            model.addAttribute("hall", hallDto);
+            model.addAttribute("slots", slotDtos);
+            model.addAttribute("date", localDate);
         } catch (DateTimeParseException e) {
             redirectAttributes.addFlashAttribute("exception", e.getMessage());
-            result = "redirect:/slots/" + hallId;
+            result = "redirect:/edit/" + hallId;
         }
-
-        SheduleDto sheduleDto;
-        HallDto hallDto = hallService.getHallById(hallId);
-        System.out.println("halldto!!! " + hallDto);
-        try {
-            sheduleDto = sheduleService.getSheduleByHall(hallDto);
-            System.out.println("sheduledto!!! " + sheduleDto);
-        } catch (NullPointerException e) {
-            System.out.println("1111111111");
-            model.addAttribute("exception", "For this date and hall we haven`t shedule");
-            sheduleDto = new SheduleDto();
-            sheduleDto.setHallDto(hallDto);
-        }
-
-        List<SlotDto> slotDtos = sheduleService.getSlotsCurrentDate(sheduleDto, localDate);
-        System.out.println("list of slots dtos" + slotDtos);
-        model.addAttribute("hall", hallDto);
-        model.addAttribute("slots", slotDtos);
-        model.addAttribute("date", localDate);
         return result;
     }
 
-    @GetMapping("slots/{idHall}/add/{date}")
-    public String addSlot(@PathVariable(value = "idHall") int hallId, @PathVariable(value = "date") String date,
+    @GetMapping("slots/{idHall}/add")
+    public String addSlot(@PathVariable(value = "idHall") int hallId,
                           Model model) {
 
         if (!model.containsAttribute("exception")) {
@@ -133,44 +108,36 @@ public class SheduleController {
         return "addSlot";
     }
 
-    @PostMapping("slots/{idHall}/add/{date}")
-    public String saveNewFilm(@PathVariable(value = "idHall") int hallId, @PathVariable(value = "date") String date,
+    @PostMapping("slots/{idHall}/add")
+    public String saveNewFilm(@PathVariable(value = "idHall") int hallId,
                               @Valid @ModelAttribute("slot") SlotDtoShort dto,
-                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        String result;
-        try {
-            LocalDate localDate = LocalDate.parse(dto.getDateOfFilm());
+                              BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+        String result = "redirect:/shedule/slots/" + hallId + "/add";
 
-            if (localDate != null && localDate.isBefore(LocalDate.now())) {
-                redirectAttributes.addFlashAttribute("exception", "You can`t add film to this day");
-                result = "redirect:/shedule/slots/" + hallId + "/add/" + dto.getDateOfFilm();
-            } else {
-                try {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("films", filmService.findAll());
+        } else {
+            try {
+                LocalDate localDate = LocalDate.parse(dto.getDateOfFilm());
+
+                if (localDate.isBefore(LocalDate.now())) {
+                    redirectAttributes.addFlashAttribute("exception", "You can`t add film to this day");
+                } else {
                     SlotDto resultSlot = slotService.saveDtoShortToSlot(dto);
-                    boolean resultUpdating;
-                    resultUpdating = sheduleService.updateShedule(hallService.getHallById(hallId), resultSlot);
-                    System.out.println("sheduleservice after update " + sheduleService.getSheduleByHall(hallService.getHallById(hallId)));
-                    System.out.println("resultUpdating " + resultUpdating);
+                    boolean resultUpdating = sheduleService.updateShedule(hallService.getHallById(hallId).getName(), resultSlot.getId());
+
                     if (!resultUpdating) {
                         slotService.deleteSlot(resultSlot);
                         redirectAttributes.addFlashAttribute("exception", "Can`t save this slot? because " +
-                                "in shedule have one with such parametrs");
-                        result = "redirect:/shedule/slots/" + hallId + "/add/" + dto.getDateOfFilm();
+                                "in shedule have one with such parameters");
                     } else {
                         result = "redirect:/shedule/slots/" + hallId + "/" + dto.getDateOfFilm();
                     }
-                } catch (NumberFormatException e) {
-                    redirectAttributes.addFlashAttribute("exception", e.getMessage());
-                    result = "redirect:/shedule/slots/" + hallId + "/add/" + dto.getDateOfFilm();
                 }
-
+            } catch (DateTimeParseException | NumberFormatException e) {
+                redirectAttributes.addFlashAttribute("exception", e.getMessage());
             }
-        } catch (DateTimeParseException e) {
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
-            result = "redirect:/shedule/slots/" + hallId + "/add/" + dto.getDateOfFilm();
         }
-
-
         return result;
     }
 
@@ -179,7 +146,7 @@ public class SheduleController {
         if (!model.containsAttribute("exception")) {
             model.addAttribute("exception", null);
         }
-
+        /*
         SlotDto slotDto = slotService.getSlotById(slotId);
         SheduleDto sheduleDto = sheduleService.getSheduleBySlot(slotDto);
         List<FilmPriceDto> filmPriceDtoList = filmPriceService.getBySlot(slotDto);
@@ -189,7 +156,36 @@ public class SheduleController {
         model.addAttribute("slot", slotDto);
         model.addAttribute("typeSeats", SeatType.values());
         return "editPriceSlot";
+
+         */
+        return null;
     }
 
+    @GetMapping("slot/edit/{id}/{date}")
+    public String editSlot(@PathVariable(value = "id") long slotId, Model model) {
+
+        if (!model.containsAttribute("exception")) {
+            model.addAttribute("exception", null);
+        }
+
+        model.addAttribute("slot", slotService.getSlotById(slotId));
+        //TODO necessary to pick our film from list
+        model.addAttribute("films", filmService.findAll());
+        return "editSlot";
+    }
+
+    @PostMapping("slot/edit/{id}/{date}")
+    public String saveEditedSlot(@PathVariable(value = "id") long slotId, @PathVariable(value = "date") String date,
+                                 @Valid @ModelAttribute("slot") SlotDto dto, BindingResult bindingResult, Model model) {
+        String result = "redirect:/slots/" + "";
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("films", filmService.findAll());
+            result = "redirect:/slot/edit/" + slotId + "/" + date;
+        } else {
+            slotService.saveSlot(dto);
+        }
+        return result;
+    }
 
 }

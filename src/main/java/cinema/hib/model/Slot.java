@@ -27,35 +27,19 @@ public class Slot {
     @Column(nullable = false)
     private LocalTime endTime;
 
-    @ManyToOne
-    @JoinColumn(name = "films_name", referencedColumnName = "name")
-    private Film film;
-
-    @ManyToOne
-    @JoinColumn(name = "shedule_id", referencedColumnName = "id")
-    private Shedule shedule;
+    @JoinColumn(name = "films_name", table = "films", referencedColumnName = "name", nullable = false)
+    private String filmName;
 
     @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
-        Slot slot = (Slot) object;
-        return dateOfFilm.equals(slot.dateOfFilm) && startTime.equals(slot.startTime) && endTime.equals(slot.endTime) && film.equals(slot.film);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Slot slot = (Slot) o;
+        return id == slot.id && dateOfFilm.equals(slot.dateOfFilm) && startTime.equals(slot.startTime) && endTime.equals(slot.endTime) && filmName.equals(slot.filmName);
     }
 
+    @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), dateOfFilm, startTime, endTime, film);
-    }
-
-    @Override
-    public java.lang.String toString() {
-        return "Slot{" +
-                "id=" + id +
-                ", dateOfFilm=" + dateOfFilm +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", film=" + film +
-                '}';
+        return Objects.hash(id, dateOfFilm, startTime, endTime, filmName);
     }
 }

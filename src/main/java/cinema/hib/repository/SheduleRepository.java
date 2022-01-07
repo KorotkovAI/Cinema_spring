@@ -1,16 +1,13 @@
 package cinema.hib.repository;
 
-import cinema.hib.model.Hall;
 import cinema.hib.model.Shedule;
-import cinema.hib.model.Slot;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 
 public interface SheduleRepository extends JpaRepository<Shedule, Long> {
 
-    Shedule getShedulesByHall (Hall hall);
+    List<Shedule> getAllByHallName (String hallName);
 
-    Shedule getSheduleBySlotsContains (Slot slot);
-
-    Shedule getAllByHall (Hall hall);
-
+    Shedule getByHallName (String hallName);
 }

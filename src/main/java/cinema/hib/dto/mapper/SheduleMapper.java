@@ -18,8 +18,8 @@ public class SheduleMapper {
         if (shedule != null) {
             SheduleDto result = new SheduleDto();
             result.setId(shedule.getId());
-            result.setHallDto(hallMapper.toHallDto(shedule.getHall()));
-            result.setSlotDtos(slotMapper.toSlotDtoList(shedule.getSlots()));
+            result.setHallDtoName(shedule.getHallName());
+            result.setSlotId(shedule.getSlotId());
             System.out.println("Result creating sheduleDto in mapper" + result);
             return result;
         }
@@ -29,8 +29,8 @@ public class SheduleMapper {
     public Shedule toShedule(SheduleDto sheduleDto) {
         Shedule result = new Shedule();
         result.setId(sheduleDto.getId());
-        result.setHall(hallMapper.toHall(sheduleDto.getHallDto()));
-        result.setSlots(slotMapper.toSlotList(sheduleDto.getSlotDtos()));
+        result.setHallName(sheduleDto.getHallDtoName());
+        result.setSlotId(sheduleDto.getSlotId());
         return result;
     }
 }

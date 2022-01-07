@@ -1,17 +1,15 @@
 package cinema.hib;
 
-import cinema.hib.model.AgeLimit;
-import cinema.hib.model.Film;
-import cinema.hib.model.Genre;
-import cinema.hib.model.Hall;
-import cinema.hib.repository.FilmRepository;
-import cinema.hib.repository.GenreRepository;
-import cinema.hib.repository.HallRepository;
+import cinema.hib.model.*;
+import cinema.hib.repository.*;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Locale;
 
 @Component
@@ -26,8 +24,14 @@ public class InitBaseRunner implements CommandLineRunner {
     @Autowired
     HallRepository hallRepository;
 
+    @Autowired
+    SlotRepository slotRepository;
+
+    @Autowired
+    SheduleRepository sheduleRepository;
+
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         Faker faker = new Faker(new Locale("uk"));
         filmRepository.deleteAll();
         for (int i = 0; i < 15; i++) {
@@ -58,5 +62,21 @@ public class InitBaseRunner implements CommandLineRunner {
         hall2.setId(2);
         hall2.setName("Second");
         hallRepository.save(hall2);
+/*
+        sheduleRepository.deleteAll();
+        Shedule shedule1 = new Shedule();
+        shedule1.setHall(hall1);
+        shedule1.setId(1);
+        shedule1.setSlots(new ArrayList<>());
+
+        slotRepository.deleteAll();
+        Slot slot1 = new Slot();
+        slot1.setId(1);
+        slot1.setDateOfFilm(LocalDate.of(2022, 1, 23));
+        slot1.setFilm(filmRepository.getById(1L));
+        slot1.setStartTime(LocalTime.of(11, 0));
+        slot1.setEndTime(LocalTime.of(15, 0));
+        slot1.setShedule(shedule1);
+ */
     }
 }

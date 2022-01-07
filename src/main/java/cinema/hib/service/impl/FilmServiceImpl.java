@@ -49,6 +49,17 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
+    public FilmDto getFilmByName(String filmName) {
+        if (filmName != null) {
+            List<Film> films = filmRepository.findAll();
+            Film currentFilm = films.stream().filter(ent -> ent.getName().equals(filmName)).
+                    findFirst().orElseThrow(() ->new EntityNotFoundException("entity with name " + filmName + "not found"));
+            return mapper.toFilmDto(currentFilm);
+        }
+        return null;
+    }
+
+    @Override
     public FilmDto saveDtoShortToFilm(FilmDtoShort filmDto) {
         Film film = filmRepository.save(mapper.toFilmFromShort(filmDto));
         return mapper.toFilmDto(film);
