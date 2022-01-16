@@ -15,11 +15,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -45,9 +43,6 @@ public class GenreServiceImplTest {
         }
     }
 
-    private Validator validator;
-
-
     @Before
     public void before() {
         Genre genre = new Genre();
@@ -60,8 +55,17 @@ public class GenreServiceImplTest {
         genreDto.setName("Comedy");
         when(genreMapper.toGenreDto(genreService.readById(4))).thenReturn(genreDto);
 
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
+        Genre genre2 = new Genre();
+        genre2.setId(3);
+        genre2.setName("Documental");
+        List<Genre> genresList = new ArrayList<>();
+        genresList.add(genre);
+        genresList.add(genre2);
+        System.out.println(genresList);
+        when(genreRepository.findAll()).thenReturn(genresList);
+        when(genreMapper.toGenreDtoList(genreRepository.findAll())).thenCallRealMethod();
+        when(genreMapper.toGenreDto(genre)).thenCallRealMethod();
+        when(genreMapper.toGenreDto(genre2)).thenCallRealMethod();
     }
 
     @Test
@@ -88,14 +92,11 @@ public class GenreServiceImplTest {
         genreService.dtoReadById(5);
     }
 
-/*
+
     @Test
-    public void dtoReadByIdMinAnnotationException() {
-
-        ConstraintViolationException ex = assertThrows(ConstraintViolationException.class, ()->{genreService.dtoReadById(-1);});
-        System.out.println(ex);
+    public void getAllPositiv() {
+        List<GenreDto> genreDtos = genreService.getAll();
+        System.out.println(genreDtos);
+        assertEquals(2, genreDtos.size());
     }
-
- */
-
 }

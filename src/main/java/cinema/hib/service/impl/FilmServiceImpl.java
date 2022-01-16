@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Service
@@ -61,14 +60,20 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public FilmDto saveDtoShortToFilm(FilmDtoShort filmDto) {
-        Film film = filmRepository.save(mapper.toFilmFromShort(filmDto));
-        return mapper.toFilmDto(film);
+        if (filmDto != null) {
+            Film film = filmRepository.save(mapper.toFilmFromShort(filmDto));
+            return mapper.toFilmDto(film);
+        }
+        return null;
     }
 
     @Override
-    public FilmDto saveDtoToFilm(@NotNull FilmDto filmDto) {
-        Film film = filmRepository.save(mapper.toFilm(filmDto));
-        return mapper.toFilmDto(film);
+    public FilmDto saveDtoToFilm(FilmDto filmDto) {
+        if (filmDto != null) {
+            Film film = filmRepository.save(mapper.toFilm(filmDto));
+            return mapper.toFilmDto(film);
+        }
+        return null;
     }
 
     @Override
@@ -81,9 +86,8 @@ public class FilmServiceImpl implements FilmService {
     public boolean deleteFilm(FilmDto filmDto) {
         if (filmDto != null) {
             filmRepository.delete(mapper.toFilm(filmDto));
-            try {
-                filmRepository.getById(filmDto.getId());
-            } catch (EntityNotFoundException e) {
+            Film film = filmRepository.getById(filmDto.getId());
+            if (film == null) {
                 return true;
             }
         }

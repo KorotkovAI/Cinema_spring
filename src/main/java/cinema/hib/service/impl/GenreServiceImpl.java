@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 
 import java.util.List;
 
@@ -31,7 +29,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public GenreDto dtoReadById(@Valid @Min(0) Integer id) {
+    public GenreDto dtoReadById(int id) {
         return genreMapper.toGenreDto(readById(id));
     }
 

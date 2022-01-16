@@ -11,5 +11,5 @@ public interface GenreService {
 
     List<GenreDto> getAll();
 
-    GenreDto dtoReadById(Integer id);
+    GenreDto dtoReadById(int id);
 }

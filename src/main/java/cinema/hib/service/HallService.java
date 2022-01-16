@@ -14,4 +14,6 @@ public interface HallService {
     HallDto getHallById(int id);
 
     Hall getHallByName(String hallName);
+
+    HallDto save(HallDto hallDto);
 }

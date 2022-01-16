@@ -1,71 +1,79 @@
 package cinema.hib.service;
 
-import cinema.hib.HibApplication;
-import cinema.hib.TestConfig;
 import cinema.hib.dto.mapper.FilmMapper;
+import cinema.hib.dto.mapper.GenreMapper;
 import cinema.hib.dto.model.FilmDto;
 import cinema.hib.dto.model.FilmDtoShort;
 import cinema.hib.model.AgeLimit;
 import cinema.hib.model.Film;
 import cinema.hib.repository.FilmRepository;
 import cinema.hib.service.impl.FilmServiceImpl;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import javax.validation.ConstraintViolationException;
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(MockitoJUnitRunner.class)
-//@SpringBootTest(classes = {HibApplication.class, TestConfig.class})
+@RunWith(SpringRunner.class)
 public class FilmServiceImpTest {
 
     @Resource
     FilmServiceImpl filmService;
 
-    @Mock
+    @MockBean
     FilmRepository filmRepository;
 
-    @Mock
+    @MockBean
     FilmMapper mapper;
 
-    @BeforeAll
+    @MockBean
+    GenreMapper genreMapper;
+
+    @TestConfiguration
+    static class filmServiceImplTestConfiguration {
+        @Bean
+        public FilmServiceImpl filmService() {
+            return new FilmServiceImpl();
+        }
+    }
+
+    @Before
     public void before() {
-        MockitoAnnotations.openMocks(this);
-       // filmService = MethodValidationProxyFactory.createProxy(filmService);
+
     }
 
     @Test
     public void getFilmById() {
-        FilmDto filmDto = new FilmDto();
-        filmDto.setId(42);
-        filmDto.setName("First");
-        filmDto.setAgeLimit(AgeLimit.ADULT);
-        filmDto.setDescription("My first film");
-        filmDto.setDuration(50);
-        when(mapper.toFilm(filmDto)).thenReturn(new Film());
-        when(filmRepository.save(mapper.toFilm(filmDto))).thenReturn(new Film());
-       // FilmDto filmSaved = filmService.saveDtoToFilm(filmDto);
-        //FilmDto result = filmService.getFilmById(1);
-//System.out.println(filmSaved.getId());
-        assertEquals(filmDto, "");
+        Film film = new Film();
+        film.setId(42);
+        film.setName("First");
+        film.setAgeLimit(AgeLimit.ADULT);
+        film.setDescription("My first film");
+        film.setDuration(50);
+        when(mapper.toFilmDto(film)).thenCallRealMethod();
+        when(filmRepository.getById(42L)).thenReturn(film);
+
+        assertEquals(filmService.getFilmById(42L).getId(), film.getId());
+        assertEquals(filmService.getFilmById(42L).getName(), film.getName());
+        assertEquals(filmService.getFilmById(42L).getDuration(), film.getDuration());
+        assertEquals(filmService.getFilmById(42L).getAgeLimit(), film.getAgeLimit());
+        assertEquals(filmService.getFilmById(42L).getDescription(), film.getDescription());
     }
 
     @Test
     public void nullGetFilmById() {
-       // when(filmService.getFilmById(-1)).thenCallRealMethod();
-        FilmDto result = filmService.getFilmById(-1);
+        FilmDto result = filmService.getFilmById(-2);
         assertNull(result);
     }
 
@@ -75,44 +83,169 @@ public class FilmServiceImpTest {
         assertNull(result);
     }
 
-    //TODO
     @Test
-    public void nullSaveDtoShortToFilm() {
-        //assertThatExceptionOfType(ConstraintViolationException.class).
-              //  isThrownBy(() -> filmService.saveDtoToFilm(null));
-        filmService.saveDtoToFilm(null);
-//        assertNotNull();
+    public void positivGetFilmByName() {
+        Film film = new Film();
+        film.setId(42);
+        film.setName("First");
+        film.setAgeLimit(AgeLimit.ADULT);
+        film.setDescription("My first film");
+        film.setDuration(50);
+        Film film2 = new Film();
+        film2.setId(3);
+        film2.setName("Second");
+        film2.setAgeLimit(AgeLimit.FROM16);
+        film2.setDescription("My second film");
+        film2.setDuration(155);
+        List<Film> films = new ArrayList<>();
+        films.add(film);
+        films.add(film2);
+        when(mapper.toFilmDto(film)).thenCallRealMethod();
+        when(filmRepository.findAll()).thenReturn(films);
+
+        assertEquals(filmService.getFilmByName("First").getId(), film.getId());
+        assertEquals(filmService.getFilmByName("First").getName(), film.getName());
+        assertEquals(filmService.getFilmByName("First").getDuration(), film.getDuration());
+        assertEquals(filmService.getFilmByName("First").getAgeLimit(), film.getAgeLimit());
+        assertEquals(filmService.getFilmByName("First").getDescription(), film.getDescription());
     }
-    /*
-//TODO
+
     @Test
-    public void saveDtoShortToFilm() {
+    public void nullNameGetFilmByName() {
+        assertNull(filmService.getFilmByName(null));
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void notFoundGetFilmByName() {
+        filmService.getFilmByName("Bruce");
+    }
+
+    @Test
+    public void positivSaveDtoShortToFiilm() {
         FilmDtoShort filmDto = new FilmDtoShort();
         filmDto.setName("First");
         filmDto.setAgeLimit(AgeLimit.ADULT);
         filmDto.setDescription("My first film");
         filmDto.setDuration(50);
 
-        when(filmService.saveDtoShortToFilm(filmDto)).thenCallRealMethod();
+        Film film = new Film();
+        film.setId(2);
+        film.setName("First");
+        film.setAgeLimit(AgeLimit.ADULT);
+        film.setDescription("My first film");
+        film.setDuration(50);
 
-        FilmDto result = filmService.saveDtoShortToFilm(filmDto);
+        when(mapper.toFilmFromShort(filmDto)).thenCallRealMethod();
+        when(filmRepository.save(mapper.toFilmFromShort(filmDto))).thenReturn(film);
+        when(mapper.toFilmDto(film)).thenCallRealMethod();
+        when(genreMapper.toGenreDtoList(film.getGenres())).thenCallRealMethod();
+        FilmDto filmDtoNew = filmService.saveDtoShortToFilm(filmDto);
+        assertEquals(filmDtoNew.getId(), film.getId());
+        /*
+        assertEquals(filmService.saveDtoShortToFilm(filmDto).getDescription(), filmDto.getDescription());
+        assertEquals(filmService.saveDtoShortToFilm(filmDto).getAgeLimit(), filmDto.getAgeLimit());
+        assertEquals(filmService.saveDtoShortToFilm(filmDto).getDescription(), filmDto.getDescription());
+        assertEquals(filmService.saveDtoShortToFilm(filmDto).getDuration(), filmDto.getDuration());
+        assertEquals(filmService.saveDtoShortToFilm(filmDto).getId(), film.getId());
 
-        assertEquals(filmDto.getName(), result.getName());
-        assertEquals(filmDto.getAgeLimit(), result.getAgeLimit());
-        assertEquals(filmDto.getDescription(), result.getDescription());
-        assertEquals(filmDto.getDuration(), result.getDuration());
+         */
     }
 
     @Test
-    public void testtt() {
-        when(filmService.findAll()).thenCallRealMethod();
-        when(filmRepository.findAll()).thenCallRealMethod();
-
-        System.out.println(filmService.findAll());
-        assertNotNull(filmService.findAll());
+    public void nullDtoSaveDtoShortToFiilm() {
+        assertNull(filmService.saveDtoShortToFilm(null));
     }
 
+    @Test
+    public void positivSaveDtoToFilm() {
+        FilmDto filmDto = new FilmDto();
+        filmDto.setId(2);
+        filmDto.setName("First");
+        filmDto.setAgeLimit(AgeLimit.ADULT);
+        filmDto.setDescription("My first film");
+        filmDto.setDuration(50);
 
+        Film film = new Film();
+        film.setId(2);
+        film.setName("First");
+        film.setAgeLimit(AgeLimit.ADULT);
+        film.setDescription("My first film");
+        film.setDuration(50);
 
- */
+        when(mapper.toFilm(filmDto)).thenCallRealMethod();
+        when(filmRepository.save(mapper.toFilm(filmDto))).thenReturn(film);
+        when(mapper.toFilmDto(film)).thenCallRealMethod();
+
+        FilmDto result = filmService.saveDtoToFilm(filmDto);
+        assertEquals(result.getName(), filmDto.getName());
+        assertEquals(result.getDescription(), filmDto.getDescription());
+        assertEquals(result.getAgeLimit(), filmDto.getAgeLimit());
+        assertEquals(result.getDescription(), filmDto.getDescription());
+        assertEquals(result.getDuration(), filmDto.getDuration());
+        assertEquals(result.getId(), filmDto.getId());
+    }
+
+    @Test
+    public void nullDtoSaveDtoToFilm() {
+        assertNull(filmService.saveDtoToFilm(null));
+    }
+
+    @Test
+    public void positivFindAll() {
+        Film film = new Film();
+        film.setId(42);
+        film.setName("First");
+        film.setAgeLimit(AgeLimit.ADULT);
+        film.setDescription("My first film");
+        film.setDuration(50);
+        Film film2 = new Film();
+        film.setId(3);
+        film.setName("Second");
+        film.setAgeLimit(AgeLimit.FROM16);
+        film.setDescription("My second film");
+        film.setDuration(155);
+        List<Film> films = new ArrayList<>();
+        films.add(film);
+        films.add(film2);
+
+        when(filmRepository.findAll()).thenReturn(films);
+        when(mapper.toFilmDtoList(films)).thenCallRealMethod();
+
+        assertEquals(filmService.findAll().size(), films.size());
+    }
+
+    @Test
+    public void nullFilmDtoDeleteFilm() {
+        assertFalse(filmService.deleteFilm(null));
+    }
+
+    @Test
+    public void positivDeleteFilm() {
+        Film film = new Film();
+        film.setId(42);
+        film.setName("First");
+        film.setAgeLimit(AgeLimit.ADULT);
+        film.setDescription("My first film");
+        film.setDuration(50);
+        Film film2 = new Film();
+        film.setId(3);
+        film.setName("Second");
+        film.setAgeLimit(AgeLimit.FROM16);
+        film.setDescription("My second film");
+        film.setDuration(155);
+        List<Film> films = new ArrayList<>();
+        films.add(film);
+        films.add(film2);
+
+        FilmDto filmDto = new FilmDto();
+        filmDto.setId(film.getId());
+        filmDto.setName(film.getName());
+        filmDto.setDescription(film.getDescription());
+        filmDto.setAgeLimit(film.getAgeLimit());
+        filmDto.setDuration(film.getDuration());
+
+        when(mapper.toFilm(filmDto)).thenCallRealMethod();
+        //when(filmRepository.delete(film)).then(films.remove(film));
+    }
+
 }

@@ -41,4 +41,10 @@ public class HallServiceImpl implements HallService {
         }
         return null;
     }
+
+    @Override
+    public HallDto save(HallDto hallDto) {
+        Hall hall = hallRepository.save(hallMapper.toHall(hallDto));
+        return hallMapper.toHallDto(hall);
+    }
 }
